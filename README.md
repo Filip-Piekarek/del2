@@ -5,11 +5,11 @@ project-group-14 created by GitHub Classroom
  
 | Team member| Total hours| Responsibility |
 |------------------ |:-------------:| ---------------|
-| Alixe| xhours | Domain Model| 
-| Eric|x hours |Database|
+| Alixe Delabrousse| xhours | Domain Model| 
+| Eric Guan|x hours |Database|
 | Omar Hussain | xhours |Build and CI |
-| Piekarek| xhours | Requirements|
-| Philip| xhours  |Database|
+| Filip Piekarek| xhours | Requirements|
+| Patrick Juneau| xhours  |Database|
 
 
 The report of this deliverable can be found [here](url).
