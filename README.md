@@ -9,7 +9,6 @@ The scope of the project is to develop a gallery system for the Art Gallery to w
 This application shall allow Users and the Gallery, to buy and Sell artwork.
 The project is divided into four sprints, each of them consisting of two weeks.
 
-testing
 
 ## Deliverable 1
  
