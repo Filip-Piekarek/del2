@@ -21,4 +21,4 @@ The project is divided into four sprints, each of them consisting of two weeks.
 | Patrick Juneau| xhours  |Database|
 
 
-The report of this deliverable can be found [here](url).
+The report of this deliverable can be found [here](https://github.com/McGill-ECSE321-Fall2020/project-group-14/wiki).
