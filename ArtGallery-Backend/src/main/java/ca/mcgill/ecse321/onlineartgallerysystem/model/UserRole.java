@@ -1,17 +1,19 @@
+package ca.mcgill.ecse321.onlineartgallerysystem.model;
+
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
 
 @Entity
 public abstract class UserRole{
-   private Person person;
+   private User user;
    
    @OneToOne(optional=false)
-   public Person getPerson() {
-      return this.person;
+   public User getUser() {
+      return this.user;
    }
    
-   public void setPerson(Person person) {
-      this.person = person;
+   public void setUser(User user) {
+      this.user = user;
    }
    
    }

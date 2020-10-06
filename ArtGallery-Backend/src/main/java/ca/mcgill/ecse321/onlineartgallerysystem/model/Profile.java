@@ -1,19 +1,10 @@
+package ca.mcgill.ecse321.onlineartgallerysystem.model;
+
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
 
 @Entity
 public class Profile{
-   private Person profileOwner;
-   
-   @OneToOne(optional=false)
-   public Person getProfileOwner() {
-      return this.profileOwner;
-   }
-   
-   public void setProfileOwner(Person profileOwner) {
-      this.profileOwner = profileOwner;
-   }
-   
    private OnlineArtGallerySystem system;
 
 public void setSystem(OnlineArtGallerySystem value) {
@@ -54,4 +45,15 @@ public void setEmailAddress(String value) {
 public String getEmailAddress() {
     return this.emailAddress;
 }
-}
+   private User user;
+   
+   @OneToOne(optional=false)
+   public User getUser() {
+      return this.user;
+   }
+   
+   public void setUser(User user) {
+      this.user = user;
+   }
+   
+   }

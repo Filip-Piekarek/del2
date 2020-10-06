@@ -1,38 +1,29 @@
+package ca.mcgill.ecse321.onlineartgallerysystem.model;
+
 import javax.persistence.Entity;
 import java.util.Set;
+import javax.persistence.CascadeType;
+import javax.persistence.OneToMany;
 
 @Entity
 public class OnlineArtGallerySystem{
-   private Set<Person> users;
+   private long id;
 
-public void setUsers(Set<Person> value) {
-    this.users = value;
+public void setId(long value) {
+    this.id = value;
 }
-public Set<Person> getUsers() {
-    return this.users;
+public long getId() {
+    return this.id;
 }
-private Set<Profile> profiles;
-
-public void setProfiles(Set<Profile> value) {
-    this.profiles = value;
-}
-public Set<Profile> getProfiles() {
-    return this.profiles;
-}
-private Set<Posting> postings;
-
-public void setPostings(Set<Posting> value) {
-    this.postings = value;
-}
-public Set<Posting> getPostings() {
-    return this.postings;
-}
-private Set<Artwork> artworks;
-
-public void setArtworks(Set<Artwork> value) {
-    this.artworks = value;
-}
-public Set<Artwork> getArtworks() {
-    return this.artworks;
-}
-}
+   private Set<User> users;
+   
+   @OneToMany(mappedBy="onlineArtGallerySystem" , cascade={CascadeType.ALL})
+   public Set<User> getUsers() {
+      return this.users;
+   }
+   
+   public void setUsers(Set<User> userss) {
+      this.users = userss;
+   }
+   
+   }

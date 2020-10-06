@@ -1,3 +1,5 @@
+package ca.mcgill.ecse321.onlineartgallerysystem.model;
+
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import java.util.Set;
@@ -5,15 +7,15 @@ import javax.persistence.OneToMany;
 
 @Entity
 public class Order{
-   private Client buyer;
+   private Client client;
    
    @ManyToOne(optional=false)
-   public Client getBuyer() {
-      return this.buyer;
+   public Client getClient() {
+      return this.client;
    }
    
-   public void setBuyer(Client buyer) {
-      this.buyer = buyer;
+   public void setClient(Client client) {
+      this.client = client;
    }
    
    private Set<Posting> items;

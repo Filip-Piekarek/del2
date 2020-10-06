@@ -1,3 +1,5 @@
+package ca.mcgill.ecse321.onlineartgallerysystem.model;
+
 import javax.persistence.Entity;
 import java.util.Set;
 import javax.persistence.OneToMany;
@@ -6,7 +8,7 @@ import javax.persistence.OneToMany;
 public class Client extends UserRole{
    private Set<Order> orders;
    
-   @OneToMany(mappedBy="buyer" )
+   @OneToMany(mappedBy="client" )
    public Set<Order> getOrders() {
       return this.orders;
    }

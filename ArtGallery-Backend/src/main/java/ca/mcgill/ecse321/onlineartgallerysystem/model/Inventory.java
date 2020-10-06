@@ -1,29 +1,32 @@
+package ca.mcgill.ecse321.onlineartgallerysystem.model;
+
 import javax.persistence.Entity;
 import java.util.Set;
 import javax.persistence.OneToMany;
+import javax.persistence.CascadeType;
 
 @Entity
 public class Inventory{
-   private Set<Posting> items;
+   private Set<User> users;
    
-   @OneToMany(mappedBy="" )
-   public Set<Posting> getItems() {
-      return this.items;
-   }
-   
-   public void setItems(Set<Posting> itemss) {
-      this.items = itemss;
-   }
-   
-   private Set<Person> users;
-   
-   @OneToMany(mappedBy="" )
-   public Set<Person> getUsers() {
+   @OneToMany(mappedBy="inventory" )
+   public Set<User> getUsers() {
       return this.users;
    }
    
-   public void setUsers(Set<Person> userss) {
+   public void setUsers(Set<User> userss) {
       this.users = userss;
+   }
+   
+   private Set<Posting> postings;
+   
+   @OneToMany(mappedBy="inventory" , cascade={CascadeType.ALL})
+   public Set<Posting> getPostings() {
+      return this.postings;
+   }
+   
+   public void setPostings(Set<Posting> postingss) {
+      this.postings = postingss;
    }
    
    }

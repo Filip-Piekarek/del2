@@ -1,3 +1,5 @@
+package ca.mcgill.ecse321.onlineartgallerysystem.model;
+
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
@@ -13,17 +15,6 @@ public class Posting{
    
    public void setOrder(Order order) {
       this.order = order;
-   }
-   
-   private Inventory ;
-   
-   @ManyToOne
-   public Inventory get() {
-      return this.;
-   }
-   
-   public void set(Inventory ) {
-      this. = ;
    }
    
    private OnlineArtGallerySystem system;
@@ -77,12 +68,15 @@ public void setVisibility(boolean value) {
 public boolean isVisibility() {
     return this.visibility;
 }
-private String/*No type specified!*/ var2;
-
-public void setVar2(String/*No type specified!*/ value) {
-    this.var2 = value;
-}
-public String/*No type specified!*/ getVar2() {
-    return this.var2;
-}
-}
+   private Inventory inventory;
+   
+   @ManyToOne(optional=false)
+   public Inventory getInventory() {
+      return this.inventory;
+   }
+   
+   public void setInventory(Inventory inventory) {
+      this.inventory = inventory;
+   }
+   
+   }
