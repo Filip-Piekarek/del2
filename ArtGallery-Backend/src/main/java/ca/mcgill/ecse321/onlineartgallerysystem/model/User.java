@@ -3,6 +3,9 @@ package ca.mcgill.ecse321.onlineartgallerysystem.model;
 import javax.persistence.Entity;
 import javax.persistence.CascadeType;
 import javax.persistence.OneToOne;
+
+import org.springframework.data.annotation.Id;
+
 import javax.persistence.ManyToOne;
 
 @Entity
@@ -23,6 +26,7 @@ public void setName(String value) {
 public String getName() {
     return this.name;
 }
+@Id
 private long id;
 
 public void setId(long value) {
