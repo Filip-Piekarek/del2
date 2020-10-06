@@ -1,7 +1,5 @@
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
-import ca.mcgill.ecse321.onlineartgallerysystem.model.OnlineArtGallerySystem;
-import javax.persistence.ManyToOne;
 
 @Entity
 public class Profile{
@@ -17,17 +15,14 @@ public class Profile{
    }
    
    private OnlineArtGallerySystem system;
-   
-   @ManyToOne(optional=false)
-   public OnlineArtGallerySystem getSystem() {
-      return this.system;
-   }
-   
-   public void setSystem(OnlineArtGallerySystem system) {
-      this.system = system;
-   }
-   
-   private String username;
+
+public void setSystem(OnlineArtGallerySystem value) {
+    this.system = value;
+}
+public OnlineArtGallerySystem getSystem() {
+    return this.system;
+}
+private String username;
 
 public void setUsername(String value) {
     this.username = value;

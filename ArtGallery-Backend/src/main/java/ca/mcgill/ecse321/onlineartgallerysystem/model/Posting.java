@@ -1,6 +1,5 @@
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
-import ca.mcgill.ecse321.onlineartgallerysystem.model.OnlineArtGallerySystem;
 import javax.persistence.OneToOne;
 
 @Entity
@@ -28,28 +27,25 @@ public class Posting{
    }
    
    private OnlineArtGallerySystem system;
-   
-   @ManyToOne(optional=false)
-   public OnlineArtGallerySystem getSystem() {
-      return this.system;
-   }
-   
-   public void setSystem(OnlineArtGallerySystem system) {
-      this.system = system;
-   }
-   
-   private Artwork item;
-   
-   @OneToOne(optional=false)
-   public Artwork getItem() {
-      return this.item;
-   }
-   
-   public void setItem(Artwork item) {
-      this.item = item;
-   }
-   
-   private long id;
+
+public void setSystem(OnlineArtGallerySystem value) {
+    this.system = value;
+}
+public OnlineArtGallerySystem getSystem() {
+    return this.system;
+}
+private Artwork item;
+
+@OneToOne(optional=false)
+public Artwork getItem() {
+   return this.item;
+}
+
+public void setItem(Artwork item) {
+   this.item = item;
+}
+
+private long id;
 
 public void setId(long value) {
     this.id = value;

@@ -1,8 +1,7 @@
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
-import ca.mcgill.ecse321.onlineartgallerysystem.model.OnlineArtGallerySystem;
-import cjava.sql.Date;
+import java.sql.Date;
 
 @Entity
 public class Artwork{
@@ -29,17 +28,14 @@ public class Artwork{
    }
    
    private OnlineArtGallerySystem system;
-   
-   @ManyToOne(optional=false)
-   public OnlineArtGallerySystem getSystem() {
-      return this.system;
-   }
-   
-   public void setSystem(OnlineArtGallerySystem system) {
-      this.system = system;
-   }
-   
-   private String name;
+
+public void setSystem(OnlineArtGallerySystem value) {
+    this.system = value;
+}
+public OnlineArtGallerySystem getSystem() {
+    return this.system;
+}
+private String name;
 
 public void setName(String value) {
     this.name = value;
