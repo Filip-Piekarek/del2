@@ -1,7 +1,4 @@
-# project-group-14
-project-group-14 created by GitHub Classroom
-
-Welcome to the ECSE 321 - Group 14 -Fall 2020 project!
+### Welcome to the ECSE 321 - Group 14 -Fall 2020 project!
 
 ## Scope of the project: 
 
