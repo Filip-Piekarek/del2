@@ -1,15 +1,17 @@
 package ca.mcgill.ecse321.onlineartgallerysystem.model;
+import javax.persistence.Id;
+
 
 import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+
 import java.sql.Date;
 
 @Entity
 public class Artwork{
    private Artist creator;
    
-   @ManyToOne(optional=false)
+   @OneToOne(optional=false)
    public Artist getCreator() {
       return this.creator;
    }
@@ -53,13 +55,15 @@ public void setDescription(String value) {
 public String getDescription() {
     return this.description;
 }
+@Id
 private long id;
 
 public void setId(long value) {
-    this.id = value;
+this.id = value;
 }
+@Id
 public long getId() {
-    return this.id;
+return this.id;
 }
 private ArtworkType artworkType;
 

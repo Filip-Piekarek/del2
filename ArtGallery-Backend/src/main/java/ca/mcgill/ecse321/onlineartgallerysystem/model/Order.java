@@ -1,4 +1,6 @@
 package ca.mcgill.ecse321.onlineartgallerysystem.model;
+import javax.persistence.Id;
+
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
@@ -17,7 +19,7 @@ public class Order{
    public void setClient(Client client) {
       this.client = client;
    }
-   
+   @Id
    private Set<Posting> items;
    
    @OneToMany(mappedBy="order" )
@@ -28,14 +30,14 @@ public class Order{
    public void setItems(Set<Posting> itemss) {
       this.items = itemss;
    }
-   
-   private Integer id;
+private Integer id;
 
 public void setId(Integer value) {
-    this.id = value;
+this.id = value;
 }
+@Id
 public Integer getId() {
-    return this.id;
+return this.id;
 }
 private boolean inStorePickUp;
 

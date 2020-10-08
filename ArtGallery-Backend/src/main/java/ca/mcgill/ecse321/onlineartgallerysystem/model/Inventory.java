@@ -1,5 +1,6 @@
 package ca.mcgill.ecse321.onlineartgallerysystem.model;
 
+
 import javax.persistence.Entity;
 import java.util.Set;
 import javax.persistence.OneToMany;
@@ -28,13 +29,4 @@ public class Inventory{
    public void setPostings(Set<Posting> postingss) {
       this.postings = postingss;
    }
-   
-   private long id;
-
-public void setId(long value) {
-    this.id = value;
-}
-public long getId() {
-    return this.id;
-}
 }

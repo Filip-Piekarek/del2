@@ -55,13 +55,4 @@ public User getUser() {
 public void setUser(User user) {
    this.user = user;
 }
-
-private String password;
-
-public void setPassword(String value) {
-    this.password = value;
-}
-public String getPassword() {
-    return this.password;
-}
 }

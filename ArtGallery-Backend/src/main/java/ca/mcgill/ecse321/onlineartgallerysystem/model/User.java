@@ -1,8 +1,11 @@
 package ca.mcgill.ecse321.onlineartgallerysystem.model;
+import javax.persistence.Id;
 
 import javax.persistence.Entity;
 import javax.persistence.CascadeType;
 import javax.persistence.OneToOne;
+
+
 import javax.persistence.ManyToOne;
 
 @Entity
@@ -23,13 +26,15 @@ public void setName(String value) {
 public String getName() {
     return this.name;
 }
+@Id
 private long id;
 
 public void setId(long value) {
-    this.id = value;
+this.id = value;
 }
+@Id
 public long getId() {
-    return this.id;
+return this.id;
 }
    private UserRole userRole;
    
