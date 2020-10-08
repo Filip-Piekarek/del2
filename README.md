@@ -9,6 +9,15 @@ The scope of the project is to develop a gallery system for the Art Gallery to w
 This application shall allow Users and the Gallery, to buy and Sell artwork.
 The project is divided into four sprints, each of them consisting of two weeks.
 
+## About the team:
+
+| Team member| Program| Year | GitHub|
+|------------------ |:-------------:|:---------------:|----------------|
+| Alixe Delabrousse| Computer Engineering| U3| [aliexd](https://github.com/aliexd)|
+| Eric Guan| Computer Engineering | U2| .. |
+| Omar Hussain| Engineering | U? | ..|
+| Filip Piekarek| Software Engineering| U3| ..|
+| Patrick Juneau| Computer Engineering| U2| ..|
 
 ## Deliverable 1
  
