@@ -24,5 +24,6 @@ public enum ArtworkType{
 	WOOD_SCULPTURE,
 	POTERY,
 	PHOTOGRAPHY,
-	
+	UNSET
+
 }

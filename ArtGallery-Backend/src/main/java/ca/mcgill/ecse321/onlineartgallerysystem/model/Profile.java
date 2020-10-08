@@ -45,15 +45,23 @@ public void setEmailAddress(String value) {
 public String getEmailAddress() {
     return this.emailAddress;
 }
-   private User user;
-   
-   @OneToOne(optional=false)
-   public User getUser() {
-      return this.user;
-   }
-   
-   public void setUser(User user) {
-      this.user = user;
-   }
-   
-   }
+private User user;
+
+@OneToOne(optional=false)
+public User getUser() {
+   return this.user;
+}
+
+public void setUser(User user) {
+   this.user = user;
+}
+
+private String password;
+
+public void setPassword(String value) {
+    this.password = value;
+}
+public String getPassword() {
+    return this.password;
+}
+}

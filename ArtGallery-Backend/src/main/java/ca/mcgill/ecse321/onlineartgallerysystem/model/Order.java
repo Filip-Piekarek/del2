@@ -5,8 +5,6 @@ import javax.persistence.ManyToOne;
 import java.util.Set;
 import javax.persistence.OneToMany;
 
-import org.springframework.data.annotation.Id;
-
 @Entity
 public class Order{
    private Client client;
@@ -30,7 +28,7 @@ public class Order{
    public void setItems(Set<Posting> itemss) {
       this.items = itemss;
    }
-   @Id
+   
    private Integer id;
 
 public void setId(Integer value) {

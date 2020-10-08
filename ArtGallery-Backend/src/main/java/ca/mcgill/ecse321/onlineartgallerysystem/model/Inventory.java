@@ -29,4 +29,12 @@ public class Inventory{
       this.postings = postingss;
    }
    
-   }
+   private long id;
+
+public void setId(long value) {
+    this.id = value;
+}
+public long getId() {
+    return this.id;
+}
+}

@@ -4,11 +4,11 @@ import javax.persistence.Entity;
 
 @Entity
 public enum OrderStatus{
-	
 	IN_PROCESS,
 	PAID,
 	CONFIRMED,
 	IN_TRANSIT,
 	DELIVERED
-	
 }
+
+
