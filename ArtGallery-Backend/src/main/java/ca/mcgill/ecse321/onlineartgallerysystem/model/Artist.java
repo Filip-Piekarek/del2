@@ -8,7 +8,7 @@ import javax.persistence.OneToMany;
 public class Artist extends UserRole{
    private Set<Artwork> artworks;
    
-   @OneToMany(mappedBy="creator" )
+   @OneToMany(mappedBy="artist" )
    public Set<Artwork> getArtworks() {
       return this.artworks;
    }

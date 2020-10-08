@@ -1,5 +1,6 @@
 package ca.mcgill.ecse321.onlineartgallerysystem.model;
 
+
 import javax.persistence.Entity;
 
 @Entity
@@ -10,7 +11,6 @@ public enum OrderStatus{
 	CONFIRMED,
 	IN_TRANSIT,
 	DELIVERED
-	
 }
 
 

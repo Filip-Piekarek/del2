@@ -21,11 +21,13 @@ public OnlineArtGallerySystem getSystem() {
 private String name;
 
 public void setName(String value) {
-    this.name = value;
+this.name = value;
 }
+@Id
 public String getName() {
-    return this.name;
+return this.name;
 }
+
 @Id
 private long id;
 

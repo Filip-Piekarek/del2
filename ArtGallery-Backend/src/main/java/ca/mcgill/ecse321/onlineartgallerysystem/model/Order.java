@@ -1,7 +1,6 @@
 package ca.mcgill.ecse321.onlineartgallerysystem.model;
 import javax.persistence.Id;
 
-
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import java.util.Set;
