@@ -39,15 +39,17 @@ public class TestArtGalleryPersistence {
 		String name = "TestUser";
 		// First example for object save/load
 		User user = new User();
+		user = createUser();
+		long userId = 345345435;
 		// First example for attribute save/load
 		user.setName(name);
 		userRepository.save(user);
 
-		person = null;
+		user = null;
 
-		person = personRepository.findPersonByName(name);
-		assertNotNull(person);
-		assertEquals(name, person.getName());
+		user = userRepository.getUser(userId);
+		assertNotNull(user);
+		assertEquals(name, user.getName());
 	}
 
 	@Test
