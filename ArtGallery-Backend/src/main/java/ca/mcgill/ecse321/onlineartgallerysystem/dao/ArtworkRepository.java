@@ -35,6 +35,7 @@ public class ArtworkRepository {
 		return art;
 	}
 	
+	@Transactional
 	public Artwork getArtwork(long artId) {
 		Artwork art = entityManager.find(Artwork.class, artId);
 		return art;
