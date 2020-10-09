@@ -1,4 +1,4 @@
-package ca.mcgill.ecse321.artgallery.dao;
+/*package ca.mcgill.ecse321.artgallery.dao;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -96,7 +96,7 @@ public class TestUserPersistence {
 		profileRepo.deleteAll();
 		userRepo.deleteAll();
 	}
-	*/
+	
 	@BeforeEach void init() {
 		
 		ID = 1818181818;
@@ -136,3 +136,5 @@ public class TestUserPersistence {
 	
 
 }
+*/
+
