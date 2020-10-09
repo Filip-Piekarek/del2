@@ -2,14 +2,18 @@ package ca.mcgill.ecse321.artgallery.model;
 
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 @Entity
+@Table(name="clients")
 public class Client extends UserRole{
 
 	@Id
+	@Column(unique=true)
 	private long id;
 
 	public void setId(long value) {
@@ -33,6 +37,7 @@ public class Client extends UserRole{
 		this.orders = orderss;
 	}
 
+	@Column
 	private String deliveryAddress;
 
 	public void setDeliveryAddress(String value) {

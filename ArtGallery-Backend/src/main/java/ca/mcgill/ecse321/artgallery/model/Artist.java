@@ -3,15 +3,19 @@ package ca.mcgill.ecse321.artgallery.model;
 
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 
 @Entity
+@Table(name="artists")
 public class Artist extends UserRole{
 	
 	@Id
+	@Column(unique=true)
 	private long id;
 
 	public void setId(long value) {
@@ -33,7 +37,7 @@ public class Artist extends UserRole{
 		this.artworks = artworkss;
 	}
 
-	
+	@Column
 	private String biography;
 
 	public void setBiography(String value) {

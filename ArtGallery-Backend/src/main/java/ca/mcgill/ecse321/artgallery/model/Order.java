@@ -1,16 +1,18 @@
 package ca.mcgill.ecse321.artgallery.model;
 import javax.persistence.Id;
-
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
 import java.util.Set;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 @Entity
+@Table(name="orders")
 public class Order{
 
-	
+	@Column
 	private Client client;
 
 	@ManyToOne(optional=false)
@@ -35,6 +37,7 @@ public class Order{
 	}
 
 	@Id
+	@Column(unique=true)
 	private Integer id;
 
 	public void setId(Integer value) {

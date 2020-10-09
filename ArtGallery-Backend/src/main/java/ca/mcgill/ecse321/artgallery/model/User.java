@@ -5,14 +5,16 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.OneToOne;
-
+import javax.persistence.Table;
 import javax.persistence.ManyToOne;
 
 @Entity
+@Table(name="users")
 public class User{
 	
-	
+	@Column
 	private String name;
 
 	public void setName(String value) {
@@ -23,6 +25,7 @@ public class User{
 		return this.name;
 	}
 
+	@Column(unique=true)
 	private long id;
 
 	public void setId(long value) {
@@ -35,8 +38,7 @@ public class User{
 		return this.id;
 	}
 	
-
-	
+	@Column
 	private UserRole userRole;
 	
 	@OneToOne(mappedBy="user" , cascade={CascadeType.ALL}, optional=true)

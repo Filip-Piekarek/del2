@@ -61,6 +61,7 @@ public class TestArtGalleryPersistence {
 		profileRepo.deleteAll();
 		artistRepo.deleteAll();
 		clientRepo.deleteAll();
+		userRoleRepo.deleteAll();
 		userRepo.deleteAll();
 		
 	}
@@ -68,20 +69,18 @@ public class TestArtGalleryPersistence {
 	@Test
 	public void testPersistAndLoadUser() {
 	
-		
 		String name = "Neil";
-		long userId = 345345435;
-		User user = new User();
-		user.setName(name);
-		user.setId(userId);
-		userRepo.save(user);
+		User user1 = new User();
+		user1.setName(name);
+		userRepo.save(user1);
+		long userId = user1.getId();
 
-		user = null;
+		user1 = null;
 
-		user = userRepo.findUserById(userId);
-		assertNotNull(user);
-		assertEquals(name, user.getName());
-		assertEquals(userId, user.getId());
+		user1 = userRepo.findUserById(userId);
+		assertNotNull(user1);
+		assertEquals(name, user1.getName());
+		assertEquals(userId, user1.getId());
 	}
 	
 //	@Test

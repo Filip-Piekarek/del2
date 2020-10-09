@@ -1,14 +1,18 @@
 package ca.mcgill.ecse321.artgallery.model;
 import javax.persistence.Id;
-
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
 import java.sql.Date;
 
 @Entity
+@Table(name="artworks")
 public class Artwork{
 	
+	@Column
 	private Artist creator;
 	
 	@OneToOne(optional=false)
@@ -32,6 +36,7 @@ public class Artwork{
 	}
 	
 
+	@Column
 	private String name;
 
 	public void setName(String value) {
@@ -42,7 +47,7 @@ public class Artwork{
 		return this.name;
 	}
 	
-	
+	@Column
 	private String description;
 
 	public void setDescription(String value) {
@@ -55,6 +60,7 @@ public class Artwork{
 	
 	
 	@Id
+	@Column(unique=true)
 	private long id;
 
 	public void setId(long value) {
@@ -78,7 +84,7 @@ public class Artwork{
 		return this.artworkType;
 	}
 	
-	
+	@Column
 	private Date date;
 
 	public void setDate(Date value) {

@@ -1,5 +1,6 @@
 package ca.mcgill.ecse321.artgallery.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
@@ -10,6 +11,7 @@ import javax.persistence.OneToOne;
 public class Profile{
 
 	@Id
+	@Column(unique=true)
 	private String username;
 
 	public void setUsername(String value) {
@@ -29,7 +31,7 @@ public class Profile{
 	public boolean isIsArtistProfile() {
 		return this.isArtistProfile;
 	}
-	
+	@Column
 	private String phoneNumber;
 
 	public void setPhoneNumber(String value) {
@@ -40,6 +42,7 @@ public class Profile{
 		return this.phoneNumber;
 	}
 	
+	@Column
 	private String emailAddress;
 
 	public void setEmailAddress(String value) {
@@ -50,7 +53,7 @@ public class Profile{
 		return this.emailAddress;
 	}
 	
-	
+	@Column
 	private User user;
 
 	@OneToOne(optional=false)
@@ -60,5 +63,16 @@ public class Profile{
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+	
+	@Column
+	public String password;
+	
+	public void setPassword(String value) {
+		this.password = value;
+	}
+	
+	public String getPassword() {
+		return this.password;
 	}
 }

@@ -1,14 +1,17 @@
 package ca.mcgill.ecse321.artgallery.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 @Entity
+@Table(name="postings")
 public class Posting{
 	
-	
+	@Column
 	private Order order;
 
 	@ManyToOne(optional=true)
@@ -20,7 +23,7 @@ public class Posting{
 		this.order = order;
 	}
 
-	
+	@Column
 	private Artwork item;
 
 	@OneToOne(optional=false)
@@ -33,6 +36,7 @@ public class Posting{
 	}
 	
 	@Id
+	@Column(unique=true)
 	private long id;
 
 	public void setId(long value) {
