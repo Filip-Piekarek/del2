@@ -25,7 +25,6 @@ import ca.mcgill.ecse321.onlineartgallerysystem.dao.OrderCrudRepository;
 import ca.mcgill.ecse321.onlineartgallerysystem.dao.PostingCrudRepository;
 import ca.mcgill.ecse321.onlineartgallerysystem.dao.ProfileCrudRepository;
 import ca.mcgill.ecse321.onlineartgallerysystem.dao.UserCrudRepository;
-import ca.mcgill.ecse321.onlineartgallerysystem.dao.UserRepository;
 import ca.mcgill.ecse321.onlineartgallerysystem.model.ArtworkType;
 import ca.mcgill.ecse321.onlineartgallerysystem.model.User;
 import ca.mcgill.ecse321.onlineartgallerysystem.service.TestArtGalleryService;
