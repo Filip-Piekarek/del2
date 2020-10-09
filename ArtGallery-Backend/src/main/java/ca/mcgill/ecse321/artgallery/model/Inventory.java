@@ -8,7 +8,7 @@ import javax.persistence.Id;
 
 @Entity
 public class Inventory{
-
+	
 	@Id
 	private long id;
 
@@ -20,9 +20,10 @@ public class Inventory{
 		return this.id;
 	}
 
+	
 	private Set<User> users;
 
-	@OneToMany(mappedBy="inventory" )
+	@OneToMany(mappedBy="inventory")
 	public Set<User> getUsers() {
 		return this.users;
 	}
@@ -31,6 +32,7 @@ public class Inventory{
 		this.users = userss;
 	}
 
+	
 	private Set<Posting> postings;
 
 	@OneToMany(mappedBy="inventory" , cascade={CascadeType.ALL})

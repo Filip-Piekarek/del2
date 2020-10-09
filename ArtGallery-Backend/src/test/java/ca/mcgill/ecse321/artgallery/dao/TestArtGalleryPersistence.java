@@ -26,8 +26,6 @@ import ca.mcgill.ecse321.artgallery.dao.OrderCrudRepository;
 import ca.mcgill.ecse321.artgallery.dao.PostingCrudRepository;
 import ca.mcgill.ecse321.artgallery.dao.ProfileCrudRepository;
 import ca.mcgill.ecse321.artgallery.dao.UserCrudRepository;
-import ca.mcgill.ecse321.artgallery.model.ArtworkType;
-import ca.mcgill.ecse321.artgallery.model.OnlineArtGallerySystem;
 import ca.mcgill.ecse321.artgallery.model.User;
 
 @ExtendWith(SpringExtension.class)
@@ -36,6 +34,8 @@ public class TestArtGalleryPersistence {
 	
 	@Autowired
 	private UserCrudRepository userRepo;
+	@Autowired 
+	private UserRoleCrudRepository userRoleRepo;
 	@Autowired
 	private ArtistCrudRepository artistRepo;
 	@Autowired
@@ -68,19 +68,12 @@ public class TestArtGalleryPersistence {
 	@Test
 	public void testPersistAndLoadUser() {
 	
-		long systemId = 24897520;
-		OnlineArtGallerySystem system = new OnlineArtGallerySystem();
-		system.setId(systemId);
 		
 		String name = "Neil";
 		long userId = 345345435;
 		User user = new User();
 		user.setName(name);
 		user.setId(userId);
-		user.setSystem(system);
-		user.setInventory(null);
-		user.setProfile(null);
-		user.setUserRole(null);
 		userRepo.save(user);
 
 		user = null;

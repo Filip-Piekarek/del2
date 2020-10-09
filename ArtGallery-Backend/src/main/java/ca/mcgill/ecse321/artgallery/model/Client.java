@@ -20,9 +20,11 @@ public class Client extends UserRole{
 		return this.id;
 	}
 
+	
+	
 	private Set<Order> orders;
 
-	@OneToMany(mappedBy="client" )
+	@OneToMany(mappedBy="client")
 	public Set<Order> getOrders() {
 		return this.orders;
 	}
@@ -36,6 +38,7 @@ public class Client extends UserRole{
 	public void setDeliveryAddress(String value) {
 		this.deliveryAddress = value;
 	}
+	
 	public String getDeliveryAddress() {
 		return this.deliveryAddress;
 	}

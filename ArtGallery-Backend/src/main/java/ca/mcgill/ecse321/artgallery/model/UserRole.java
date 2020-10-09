@@ -7,10 +7,21 @@ import javax.persistence.OneToOne;
 
 @Entity
 public abstract class UserRole{
+	
 	@Id
+	private long id;
+
+	public void setId(long value) {
+		this.id = value;
+	}
+	@Id
+	public long getId() {
+		return this.id;
+	}
+
+	
 	private User user;
 
-	@Id
 	@OneToOne(optional=false)
 	public User getUser() {
 		return this.user;

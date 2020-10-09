@@ -7,9 +7,11 @@ import javax.persistence.OneToOne;
 
 @Entity
 public class Posting{
+	
+	
 	private Order order;
 
-	@ManyToOne(optional=false)
+	@ManyToOne(optional=true)
 	public Order getOrder() {
 		return this.order;
 	}
@@ -18,14 +20,7 @@ public class Posting{
 		this.order = order;
 	}
 
-	private OnlineArtGallerySystem system;
-
-	public void setSystem(OnlineArtGallerySystem value) {
-		this.system = value;
-	}
-	public OnlineArtGallerySystem getSystem() {
-		return this.system;
-	}
+	
 	private Artwork item;
 
 	@OneToOne(optional=false)
@@ -36,6 +31,7 @@ public class Posting{
 	public void setItem(Artwork item) {
 		this.item = item;
 	}
+	
 	@Id
 	private long id;
 
@@ -46,22 +42,7 @@ public class Posting{
 	public long getId() {
 		return this.id;
 	}
-	private boolean inStorePickUp;
-
-	public void setInStorePickUp(boolean value) {
-		this.inStorePickUp = value;
-	}
-	public boolean isInStorePickUp() {
-		return this.inStorePickUp;
-	}
-	private OrderStatus orderStatus;
-
-	public void setOrderStatus(OrderStatus value) {
-		this.orderStatus = value;
-	}
-	public OrderStatus getOrderStatus() {
-		return this.orderStatus;
-	}
+	
 	private boolean visibility;
 
 	public void setVisibility(boolean value) {
@@ -70,9 +51,11 @@ public class Posting{
 	public boolean isVisibility() {
 		return this.visibility;
 	}
+	
+	
 	private Inventory inventory;
 
-	@ManyToOne(optional=false)
+	@ManyToOne(optional=true)
 	public Inventory getInventory() {
 		return this.inventory;
 	}

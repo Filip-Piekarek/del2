@@ -7,8 +7,10 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+
 @Entity
 public class Artist extends UserRole{
+	
 	@Id
 	private long id;
 
@@ -31,11 +33,13 @@ public class Artist extends UserRole{
 		this.artworks = artworkss;
 	}
 
+	
 	private String biography;
 
 	public void setBiography(String value) {
 		this.biography = value;
 	}
+	
 	public String getBiography() {
 		return this.biography;
 	}
