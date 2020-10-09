@@ -1,4 +1,4 @@
-package ca.mcgill.ecse321.onlineartgallerysystem.dao;
+package ca.mcgill.ecse321.artgallery.dao;
 
 import java.sql.Date;
 
@@ -8,11 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import ca.mcgill.ecse321.onlineartgallerysystem.model.Artist;
-import ca.mcgill.ecse321.onlineartgallerysystem.model.Artwork;
-import ca.mcgill.ecse321.onlineartgallerysystem.model.ArtworkType;
-import ca.mcgill.ecse321.onlineartgallerysystem.model.OnlineArtGallerySystem;
-import ca.mcgill.ecse321.onlineartgallerysystem.model.Posting;
+import ca.mcgill.ecse321.artgallery.model.Artist;
+import ca.mcgill.ecse321.artgallery.model.Artwork;
+import ca.mcgill.ecse321.artgallery.model.ArtworkType;
+import ca.mcgill.ecse321.artgallery.model.OnlineArtGallerySystem;
+import ca.mcgill.ecse321.artgallery.model.Posting;
 
 @Repository
 public class ArtworkRepository {
@@ -30,7 +30,7 @@ public class ArtworkRepository {
 		art.setDescription(description);
 		art.setName(name);
 		art.setPosting(posting);
-		art.setSystem(system);
+
 		entityManager.persist(art);
 		return art;
 	}

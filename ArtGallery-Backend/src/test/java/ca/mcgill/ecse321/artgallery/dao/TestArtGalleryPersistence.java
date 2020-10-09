@@ -18,57 +18,69 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import ca.mcgill.ecse321.onlineartgallerysystem.dao.ArtistCrudRepository;
-import ca.mcgill.ecse321.onlineartgallerysystem.dao.ArtworkCrudRepository;
-import ca.mcgill.ecse321.onlineartgallerysystem.dao.InventoryCrudRepository;
-import ca.mcgill.ecse321.onlineartgallerysystem.dao.OrderCrudRepository;
-import ca.mcgill.ecse321.onlineartgallerysystem.dao.PostingCrudRepository;
-import ca.mcgill.ecse321.onlineartgallerysystem.dao.ProfileCrudRepository;
-import ca.mcgill.ecse321.onlineartgallerysystem.dao.UserCrudRepository;
-import ca.mcgill.ecse321.onlineartgallerysystem.model.ArtworkType;
-import ca.mcgill.ecse321.onlineartgallerysystem.model.User;
-import ca.mcgill.ecse321.onlineartgallerysystem.service.TestArtGalleryService;
+import ca.mcgill.ecse321.artgallery.dao.ArtistCrudRepository;
+import ca.mcgill.ecse321.artgallery.dao.ArtworkCrudRepository;
+import ca.mcgill.ecse321.artgallery.dao.ClientCrudRepository;
+import ca.mcgill.ecse321.artgallery.dao.InventoryCrudRepository;
+import ca.mcgill.ecse321.artgallery.dao.OrderCrudRepository;
+import ca.mcgill.ecse321.artgallery.dao.PostingCrudRepository;
+import ca.mcgill.ecse321.artgallery.dao.ProfileCrudRepository;
+import ca.mcgill.ecse321.artgallery.dao.UserCrudRepository;
+import ca.mcgill.ecse321.artgallery.model.ArtworkType;
+import ca.mcgill.ecse321.artgallery.model.OnlineArtGallerySystem;
+import ca.mcgill.ecse321.artgallery.model.User;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 public class TestArtGalleryPersistence {
-
-	@Autowired
-	private TestArtGalleryService service;
-	@Autowired
-	private ArtistCrudRepository artistRepo;
-	@Autowired
-	private ArtworkCrudRepository artworkRepo;
-	@Autowired
-	private OrderCrudRepository orderRepo;
-	@Autowired
-	private PostingCrudRepository postingRepo;
-	@Autowired
-	private ProfileCrudRepository profileRepo;
+	
 	@Autowired
 	private UserCrudRepository userRepo;
 	@Autowired
+	private ArtistCrudRepository artistRepo;
+	@Autowired
+	private ClientCrudRepository clientRepo;
+	@Autowired
+	private ProfileCrudRepository profileRepo;
+	@Autowired
 	private InventoryCrudRepository inventoryRepo;
+	@Autowired
+	private ArtworkCrudRepository artworkRepo;
+	@Autowired
+	private PostingCrudRepository postingRepo;
+	@Autowired
+	private OrderCrudRepository orderRepo;
 
 	@AfterEach
 	public void clearDatabase() {
-
-		userRepo.deleteAll();
 		orderRepo.deleteAll();
-		artistRepo.deleteAll();
-		artworkRepo.deleteAll();
 		postingRepo.deleteAll();
-		profileRepo.deleteAll();
+		artworkRepo.deleteAll();
 		inventoryRepo.deleteAll();
+		
+		profileRepo.deleteAll();
+		artistRepo.deleteAll();
+		clientRepo.deleteAll();
+		userRepo.deleteAll();
+		
 	}
 
 	@Test
 	public void testPersistAndLoadUser() {
+	
+		long systemId = 24897520;
+		OnlineArtGallerySystem system = new OnlineArtGallerySystem();
+		system.setId(systemId);
 		
 		String name = "Neil";
-		User user = new User();
 		long userId = 345345435;
+		User user = new User();
 		user.setName(name);
+		user.setId(userId);
+		user.setSystem(system);
+		user.setInventory(null);
+		user.setProfile(null);
+		user.setUserRole(null);
 		userRepo.save(user);
 
 		user = null;
@@ -79,25 +91,25 @@ public class TestArtGalleryPersistence {
 		assertEquals(userId, user.getId());
 	}
 	
-	@Test
-	public void testCreateUser() {
-		
-		assertEquals(0, service.getAllUser().size());
-
-		String name = "Neil";
-
-		try {
-			service.createUser(name);
-		} catch (IllegalArgumentException e) {
-
-			fail();
-		}
-
-		List<User> allUsers = service.getAllUser();
-
-		assertEquals(1, allUsers.size());
-		assertEquals(name, allUsers.get(0).getName());
-	}
+//	@Test
+//	public void testCreateUser() {
+//		
+//		assertEquals(0, service.getAllUser().size());
+//
+//		String name = "Neil";
+//
+//		try {
+//			service.createUser(name);
+//		} catch (IllegalArgumentException e) {
+//
+//			fail();
+//		}
+//
+//		List<User> allUsers = service.getAllUser();
+//
+//		assertEquals(1, allUsers.size());
+//		assertEquals(name, allUsers.get(0).getName());
+//	}
 	
 	/*@Test
 	public void testPersistAndLoadArtwork() {

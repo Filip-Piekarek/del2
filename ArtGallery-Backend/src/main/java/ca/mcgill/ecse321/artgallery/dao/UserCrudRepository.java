@@ -1,10 +1,10 @@
-package ca.mcgill.ecse321.onlineartgallerysystem.dao;
+package ca.mcgill.ecse321.artgallery.dao;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import ca.mcgill.ecse321.onlineartgallerysystem.model.Inventory;
-import ca.mcgill.ecse321.onlineartgallerysystem.model.OnlineArtGallerySystem;
-import ca.mcgill.ecse321.onlineartgallerysystem.model.User;
+import ca.mcgill.ecse321.artgallery.model.Inventory;
+import ca.mcgill.ecse321.artgallery.model.OnlineArtGallerySystem;
+import ca.mcgill.ecse321.artgallery.model.User;
 
 @Repository
 public interface UserCrudRepository extends CrudRepository<User, Long>{

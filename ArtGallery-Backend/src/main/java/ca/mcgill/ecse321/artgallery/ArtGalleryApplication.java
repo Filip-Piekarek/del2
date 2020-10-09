@@ -13,9 +13,9 @@ public class ArtGalleryApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(ArtGalleryApplication.class, args);
 	}
-@RequestMapping("/")
-  public String greeting(){
-    return "Hello world!";
-  }
+	@RequestMapping("/")
+	public String greeting(){
+		return "Hello world!";
+	}
 
 }
