@@ -7,7 +7,7 @@ import ca.mcgill.ecse321.artgallery.model.Artist;
 @Repository
 public interface ArtistCrudRepository extends CrudRepository<Artist, Long>{
     
-    Artist findArtworkById(long id);
+    Artist findArtistById(long id);
     
     void deleteAll();
 }

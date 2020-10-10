@@ -26,6 +26,8 @@ import ca.mcgill.ecse321.artgallery.dao.OrderCrudRepository;
 import ca.mcgill.ecse321.artgallery.dao.PostingCrudRepository;
 import ca.mcgill.ecse321.artgallery.dao.ProfileCrudRepository;
 import ca.mcgill.ecse321.artgallery.dao.UserCrudRepository;
+import ca.mcgill.ecse321.artgallery.model.Artist;
+import ca.mcgill.ecse321.artgallery.model.Client;
 import ca.mcgill.ecse321.artgallery.model.User;
 
 @ExtendWith(SpringExtension.class)
@@ -65,91 +67,94 @@ public class TestArtGalleryPersistence {
 		userRepo.deleteAll();
 		
 	}
-
+	
 	@Test
-	public void testPersistAndLoadUser() {
-	
-		String name = "Neil";
-		User user1 = new User();
-		user1.setName(name);
-		userRepo.save(user1);
-		long userId = user1.getId();
+    public void testPersistAndLoadUser() {
+    
+        String name = "Neil";
+        User user1 = new User();
+        //Profile profile = new Profile();
+        //Inventory inventory = new Inventory();
+        //Client client = new Client();
+        user1.setName(name);
+        //user1.setProfile(profile);
+        //user1.setUserRole(client);
+        //user1.setInventory(inventory);
+        userRepo.save(user1);
+        long userId = user1.getId();
 
-		user1 = null;
+        user1 = null;
 
-		user1 = userRepo.findUserById(userId);
-		assertNotNull(user1);
-		assertEquals(name, user1.getName());
-		assertEquals(userId, user1.getId());
-	}
-	
-//	@Test
-//	public void testCreateUser() {
-//		
-//		assertEquals(0, service.getAllUser().size());
-//
-//		String name = "Neil";
-//
-//		try {
-//			service.createUser(name);
-//		} catch (IllegalArgumentException e) {
-//
-//			fail();
-//		}
-//
-//		List<User> allUsers = service.getAllUser();
-//
-//		assertEquals(1, allUsers.size());
-//		assertEquals(name, allUsers.get(0).getName());
-//	}
-	
-	/*@Test
-	public void testPersistAndLoadArtwork() {
-		String name = "Artwork_test";
-		Date date = java.sql.Date.valueOf(LocalDate.of(2020, Month.APRIL, 20));
-		ArtworkType type = SPRAY_PAINT;
-		
-		assertNotNull(event);
-		assertEquals(name, event.getName());
-		assertEquals(date, event.getDate());
-		assertEquals(startTime, event.getStartTime());
-		assertEquals(endTime, event.getEndTime());
-	}
-
+        user1 = userRepo.findUserById(userId);
+        assertNotNull(user1);
+        assertEquals(name, user1.getName());
+        //assertEquals(inventory, user1.getInventory());
+        assertEquals(name, user1.getName());
+        assertEquals(name, user1.getName());
+        assertEquals(userId, user1.getId());
+    }
 	@Test
-	public void testPersistAndLoadRegistration() {
-		String personName = "TestPerson";
-		Person person = new Person();
-		person.setName(personName);
-		personRepository.save(person);
-
-		String eventName = "ECSE321 Tutorial";
-		Date date = java.sql.Date.valueOf(LocalDate.of(2020, Month.JANUARY, 31));
-		Time startTime = java.sql.Time.valueOf(LocalTime.of(11, 35));
-		Time endTime = java.sql.Time.valueOf(LocalTime.of(13, 25));
-		Event event = new Event();
-		event.setName(eventName);
-		event.setDate(date);
-		event.setStartTime(startTime);
-		event.setEndTime(endTime);
-		eventRepository.save(event);
-
-		Registration reg = new Registration();
-		int regId = 1;
-		// First example for reference save/load
-		reg.setId(regId);
-		reg.setPerson(person);
-		reg.setEvent(event);
-		registrationRepository.save(reg);
-
-		reg = null;
-
-		reg = registrationRepository.findByPersonAndEvent(person, event);
-		assertNotNull(reg);
-		assertEquals(regId, reg.getId());
-		// Comparing by keys
-		assertEquals(person.getName(), reg.getPerson().getName());
-		assertEquals(event.getName(), reg.getEvent().getName());
-	}*/
-
+    public void testPersistAndLoadArtist() {
+        
+        String name = "name";
+        User user2 = new User();
+        System.err.println("BONK");
+        Artist artist2 = new Artist();
+        System.err.println("BONK1");
+        String bio = "bio";
+        System.err.println("BONK2");
+        user2.setName(name);
+        System.err.println("BONK3");
+        //user2.setUserRole(artist2);
+        System.err.println("BONK4");
+        userRepo.save(user2);
+        
+        long userId = user2.getId();
+        System.err.println("BONK5");
+        artist2.setUser(user2);
+        System.err.println("BONK6");
+        artist2.setBiography(bio);
+        System.err.println("BONK7");
+        artistRepo.save(artist2);
+        System.err.println("BONK8");
+        long id = artist2.getId();
+        
+        
+        
+        artist2 = null;
+        user2 = null;
+        
+        user2 = userRepo.findUserById(userId);
+        artist2 = artistRepo.findArtistById(id);
+        
+        assertNotNull(artist2);
+        assertEquals(id, artist2.getId());
+        assertEquals(bio, artist2.getBiography());
+        
+    }
+	@Test
+    public void testPersistAndLoadClient() {
+        String name = "name";
+        User user3 = new User();
+        Client client3 = new Client();
+        String address = "address";
+        user3.setName(name);
+        userRepo.save(user3);
+        long userId = user3.getId();
+        
+        client3.setUser(user3);
+        client3.setDeliveryAddress(address);
+        clientRepo.save(client3);
+        long id = client3.getId();
+        
+        client3 = null;
+        user3 = null;
+        
+        user3 = userRepo.findUserById(userId);
+        client3 = clientRepo.findClientById(id);
+        
+        assertNotNull(client3);
+        assertEquals(id, client3.getId());
+        assertEquals(address, client3.getDeliveryAddress());
+    }
 }
