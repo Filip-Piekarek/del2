@@ -12,7 +12,6 @@ import javax.persistence.Table;
 
 
 @Entity
-@Table(name="artists")
 public class Artist extends UserRole{
     
     @Id

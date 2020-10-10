@@ -3,6 +3,8 @@ import javax.persistence.Id;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.ManyToOne;
 import java.util.Set;
 import javax.persistence.OneToMany;
@@ -38,14 +40,15 @@ public class Order{
 
 	@Id
 	@Column(unique=true)
-	private Integer id;
+	private long id;
 
-	public void setId(Integer value) {
+	public void setId(long value) {
 		this.id = value;
 	}
 	
 	@Id
-	public Integer getId() {
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	public long getId() {
 		return this.id;
 	}
 	

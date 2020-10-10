@@ -4,6 +4,8 @@ import java.util.Set;
 import javax.persistence.OneToMany;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
@@ -16,6 +18,7 @@ public class Inventory{
 		this.id = value;
 	}
 	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	public long getId() {
 		return this.id;
 	}

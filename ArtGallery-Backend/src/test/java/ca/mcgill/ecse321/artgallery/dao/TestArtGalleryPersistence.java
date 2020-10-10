@@ -9,7 +9,9 @@ import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Month;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -28,6 +30,10 @@ import ca.mcgill.ecse321.artgallery.dao.ProfileCrudRepository;
 import ca.mcgill.ecse321.artgallery.dao.UserCrudRepository;
 import ca.mcgill.ecse321.artgallery.model.Artist;
 import ca.mcgill.ecse321.artgallery.model.Client;
+import ca.mcgill.ecse321.artgallery.model.Inventory;
+import ca.mcgill.ecse321.artgallery.model.Order;
+import ca.mcgill.ecse321.artgallery.model.OrderStatus;
+import ca.mcgill.ecse321.artgallery.model.Profile;
 import ca.mcgill.ecse321.artgallery.model.User;
 
 @ExtendWith(SpringExtension.class)
@@ -98,25 +104,15 @@ public class TestArtGalleryPersistence {
         
         String name = "name";
         User user2 = new User();
-        System.err.println("BONK");
         Artist artist2 = new Artist();
-        System.err.println("BONK1");
         String bio = "bio";
-        System.err.println("BONK2");
         user2.setName(name);
-        System.err.println("BONK3");
-        //user2.setUserRole(artist2);
-        System.err.println("BONK4");
         userRepo.save(user2);
         
         long userId = user2.getId();
-        System.err.println("BONK5");
         artist2.setUser(user2);
-        System.err.println("BONK6");
         artist2.setBiography(bio);
-        System.err.println("BONK7");
         artistRepo.save(artist2);
-        System.err.println("BONK8");
         long id = artist2.getId();
         
         
@@ -157,4 +153,103 @@ public class TestArtGalleryPersistence {
         assertEquals(id, client3.getId());
         assertEquals(address, client3.getDeliveryAddress());
     }
+	
+	@Test
+	public void testPersistAndLoadOrder() {
+		
+		 String name = "name";
+		 User user4 = new User();
+		 user4.setName(name);
+		 userRepo.save(user4);
+		 long userId = user4.getId();
+		 
+		 String address = "address";
+		 Client client4 = new Client();
+		 client4.setDeliveryAddress(address);
+		 client4.setUser(user4);
+		 clientRepo.save(client4);
+		 long clientId = client4.getId();
+		 
+		 boolean pickup = true;
+		 Order order4 = new Order();
+		 order4.setClient(client4);
+		 order4.setInStorePickUp(pickup);
+		 order4.setOrderStatus(OrderStatus.DELIVERED);
+		 orderRepo.save(order4);
+		 long orderId = order4.getId();
+		 
+		 order4 = null;
+		 client4 = null;
+		 user4 = null;
+		 
+		 user4 = userRepo.findUserById(userId);
+		 client4 = clientRepo.findClientById(clientId);
+		 order4 = orderRepo.findOrderById(orderId);
+		 
+		 assertNotNull(order4);
+		 assertEquals(orderId, order4.getId());
+	}
+	
+	@Test
+	public void testPersistAndLoadProfile() {
+		
+		String name = "name";
+		User user5 = new User();
+		user5.setName(name);
+		userRepo.save(user5);
+		long userId = user5.getId();
+		 
+		String email = "neil.banik@mail.mcgill.ca";
+		String username = "username";
+		boolean artist = true;
+		String phone = "1-800-696-9420";
+		String password = "**********";
+		Profile profile = new Profile();
+		profile.setEmailAddress(email);
+		profile.setIsArtistProfile(artist);
+		profile.setPassword(password);
+		profile.setPhoneNumber(phone);
+		profile.setUser(user5);
+		profile.setUsername(username);
+		profileRepo.save(profile);
+		
+		profile = null;
+		user5 = null;
+		
+		user5 = userRepo.findUserById(userId);
+		profile = profileRepo.findProfileByUsername(username);
+		
+		assertNotNull(profile);
+		assertEquals(email, profile.getEmailAddress());
+		assertEquals(username, profile.getUsername());
+		assertEquals(phone, profile.getPhoneNumber());
+		assertEquals(password, profile.getPassword());
+	}
+	
+	@Test
+	public void testPersistAndLoadInventory() {
+		
+		String name = "name";
+		User user6 = new User();
+		user6.setName(name);
+		userRepo.save(user6);
+		long userId = user6.getId();
+		Set<User> users = Collections.emptySet();;
+		users.add(user6);
+		
+		Inventory inventory = new Inventory();
+		inventory.setUsers(users);
+		inventoryRepo.save(inventory);
+		long invenId = inventory.getId();
+		
+		inventory = null;
+		user6 = null;
+		
+		user6 = userRepo.findUserById(userId);
+		inventory = inventoryRepo.findInventoryById(invenId);
+		
+		assertNotNull(inventory);
+		assertEquals(invenId, inventory.getId());
+		assertEquals(users, inventory.getUsers());
+	}
 }
