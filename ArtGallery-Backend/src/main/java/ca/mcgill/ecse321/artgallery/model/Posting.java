@@ -2,6 +2,8 @@ package ca.mcgill.ecse321.artgallery.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
@@ -43,6 +45,7 @@ public class Posting{
 		this.id = value;
 	}
 	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	public long getId() {
 		return this.id;
 	}

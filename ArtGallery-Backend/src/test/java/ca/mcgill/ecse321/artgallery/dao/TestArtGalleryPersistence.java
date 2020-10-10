@@ -35,6 +35,7 @@ import ca.mcgill.ecse321.artgallery.model.Client;
 import ca.mcgill.ecse321.artgallery.model.Inventory;
 import ca.mcgill.ecse321.artgallery.model.Order;
 import ca.mcgill.ecse321.artgallery.model.OrderStatus;
+import ca.mcgill.ecse321.artgallery.model.Posting;
 import ca.mcgill.ecse321.artgallery.model.Profile;
 import ca.mcgill.ecse321.artgallery.model.User;
 
@@ -81,13 +82,7 @@ public class TestArtGalleryPersistence {
     
         String name = "Neil";
         User user1 = new User();
-        //Profile profile = new Profile();
-        //Inventory inventory = new Inventory();
-        //Client client = new Client();
         user1.setName(name);
-        //user1.setProfile(profile);
-        //user1.setUserRole(client);
-        //user1.setInventory(inventory);
         userRepo.save(user1);
         long userId = user1.getId();
 
@@ -96,7 +91,6 @@ public class TestArtGalleryPersistence {
         user1 = userRepo.findUserById(userId);
         assertNotNull(user1);
         assertEquals(name, user1.getName());
-        //assertEquals(inventory, user1.getInventory());
         assertEquals(name, user1.getName());
         assertEquals(name, user1.getName());
         assertEquals(userId, user1.getId());
@@ -236,7 +230,7 @@ public class TestArtGalleryPersistence {
 		user6.setName(name);
 		userRepo.save(user6);
 		long userId = user6.getId();
-		Set<User> users = Collections.emptySet();;
+		Set<User> users = Collections.emptySet();
 		users.add(user6);
 		
 		Inventory inventory = new Inventory();
@@ -257,16 +251,11 @@ public class TestArtGalleryPersistence {
 	@Test
     public void testPersistAndLoadArtwork() {
 		
-		Date date = java.sql.Date.valueOf(LocalDate.of(2020, Month.APRIL, 20));
-        String name = "name";
-        String paintingName = "YEET";
-        String description ="MHHHHHHHMMMM veryyy nice artwooooork";
-        
+		String name = "name";
         User user2 = new User();
         user2.setName(name);
         userRepo.save(user2);
         long userId = user2.getId();
-        System.err.println("BONK");
 
         Artist artist2 = new Artist();
         String bio = "bio";
@@ -274,28 +263,22 @@ public class TestArtGalleryPersistence {
         artist2.setBiography(bio);
         artistRepo.save(artist2);
         long id = artist2.getId();
-        System.err.println("BONK1");
         
-
+        Date date = java.sql.Date.valueOf(LocalDate.of(2020, Month.APRIL, 20));
+        String paintingName = "YEET";
+        String description ="MHHHHHHHMMMM veryyy nice artwooooork";
         Artwork artwork = new Artwork();
         artwork.setCreator(artist2);
         artwork.setDescription(description);
         artwork.setArtworkType(ArtworkType.FRESCO_PAINTING);
         artwork.setName(paintingName);
         artwork.setDate(date);
-        System.err.println("BONK2");
-
-       
         artworkRepo.save(artwork);
-        System.err.println("BONK3");
-
         long artid = artwork.getId();
-        System.err.println("BONK4");
 
         artwork = null;
         artist2 = null;
         user2 = null;
-        
         
         user2 = userRepo.findUserById(userId);
         artist2 = artistRepo.findArtistById(id);
@@ -307,10 +290,55 @@ public class TestArtGalleryPersistence {
         assertEquals(description, artwork.getDescription());
         assertEquals(paintingName, artwork.getName());
         assertEquals(artist2, artwork.getCreator());
-
-
-
-
-        
     }
+	
+	@Test
+	public void testPersistAndLoadPosting() {
+		
+		String name = "name";
+		User user7 = new User();
+		user7.setName(name);
+		userRepo.save(user7);
+		long userId = user7.getId();
+		
+		Artist artist3 = new Artist();
+        String bio = "bio";
+        artist3.setUser(user7);
+        artist3.setBiography(bio);
+        artistRepo.save(artist3);
+        long artistId = artist3.getId();
+        
+        Date date = java.sql.Date.valueOf(LocalDate.of(2020, Month.APRIL, 20));
+        String paintingName = "YEET";
+        String description ="MHHHHHHHMMMM veryyy nice artwooooork";
+        Artwork artwork = new Artwork();
+        artwork.setCreator(artist3);
+        artwork.setDescription(description);
+        artwork.setArtworkType(ArtworkType.FRESCO_PAINTING);
+        artwork.setName(paintingName);
+        artwork.setDate(date);
+        artworkRepo.save(artwork);
+        long artid = artwork.getId();
+        
+        boolean visible = true;
+        Posting posting = new Posting();
+        posting.setItem(artwork);
+        posting.setVisibility(visible);
+        postingRepo.save(posting);
+        long postId = posting.getId();
+        
+        posting = null;
+        artwork = null;
+        artist3 = null;
+        user7 = null;
+        
+        user7 = userRepo.findUserById(userId);
+        artist3 = artistRepo.findArtistById(artistId);
+        artwork = artworkRepo.findArtworkById(artid);
+        posting = postingRepo.findPostingById(postId);
+        
+        assertNotNull(posting);
+        assertEquals(postId, posting.getId());
+        assertEquals(artwork, posting.getItem());
+	}
 }
