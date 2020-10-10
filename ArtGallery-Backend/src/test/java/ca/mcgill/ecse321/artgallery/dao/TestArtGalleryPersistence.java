@@ -27,6 +27,8 @@ import ca.mcgill.ecse321.artgallery.dao.PostingCrudRepository;
 import ca.mcgill.ecse321.artgallery.dao.ProfileCrudRepository;
 import ca.mcgill.ecse321.artgallery.dao.UserCrudRepository;
 import ca.mcgill.ecse321.artgallery.model.Artist;
+import ca.mcgill.ecse321.artgallery.model.Artwork;
+import ca.mcgill.ecse321.artgallery.model.ArtworkType;
 import ca.mcgill.ecse321.artgallery.model.Client;
 import ca.mcgill.ecse321.artgallery.model.User;
 
@@ -156,5 +158,64 @@ public class TestArtGalleryPersistence {
         assertNotNull(client3);
         assertEquals(id, client3.getId());
         assertEquals(address, client3.getDeliveryAddress());
+    }
+	@Test
+    public void testPersistAndLoadArtwork() {
+		
+		Date date = java.sql.Date.valueOf(LocalDate.of(2020, Month.APRIL, 20));
+        String name = "name";
+        String paintingName = "YEET";
+        String description ="MHHHHHHHMMMM veryyy nice artwooooork";
+        
+        User user2 = new User();
+        user2.setName(name);
+        userRepo.save(user2);
+        long userId = user2.getId();
+        System.err.println("BONK");
+
+        Artist artist2 = new Artist();
+        String bio = "bio";
+        artist2.setUser(user2);
+        artist2.setBiography(bio);
+        artistRepo.save(artist2);
+        long id = artist2.getId();
+        System.err.println("BONK1");
+        
+
+        Artwork artwork = new Artwork();
+        artwork.setCreator(artist2);
+        artwork.setDescription(description);
+        artwork.setArtworkType(ArtworkType.FRESCO_PAINTING);
+        artwork.setName(paintingName);
+        artwork.setDate(date);
+        System.err.println("BONK2");
+
+       
+        artworkRepo.save(artwork);
+        System.err.println("BONK3");
+
+        long artid = artwork.getId();
+        System.err.println("BONK4");
+
+        artwork = null;
+        artist2 = null;
+        user2 = null;
+        
+        
+        user2 = userRepo.findUserById(userId);
+        artist2 = artistRepo.findArtistById(id);
+        artwork = artworkRepo.findArtworkById(artid);
+        
+        assertNotNull(artwork);
+        assertEquals(artid, artwork.getId());
+        assertEquals(date, artwork.getDate());
+        assertEquals(description, artwork.getDescription());
+        assertEquals(paintingName, artwork.getName());
+        assertEquals(artist2, artwork.getCreator());
+
+
+
+
+        
     }
 }
