@@ -2,6 +2,8 @@ package ca.mcgill.ecse321.artgallery.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
@@ -35,6 +37,17 @@ public class Posting{
 		this.item = item;
 	}
 	
+	@Column
+	private double price;
+	
+	public double getPrice() {
+		return this.price;
+	}
+	
+	public void setPrice(double price) {
+		this.price = price;
+	}
+	
 	@Id
 	@Column(unique=true)
 	private long id;
@@ -43,6 +56,7 @@ public class Posting{
 		this.id = value;
 	}
 	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	public long getId() {
 		return this.id;
 	}
@@ -56,16 +70,4 @@ public class Posting{
 		return this.visibility;
 	}
 	
-	
-	private Inventory inventory;
-
-	@ManyToOne(optional=true)
-	public Inventory getInventory() {
-		return this.inventory;
-	}
-
-	public void setInventory(Inventory inventory) {
-		this.inventory = inventory;
-	}
-
 }

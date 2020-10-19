@@ -1,16 +1,14 @@
 package ca.mcgill.ecse321.artgallery.dao;
 
-import static org.junit.jupiter.api.Assertions.fail;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.sql.Date;
-import java.sql.Time;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.Month;
-import java.util.Collections;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.jupiter.api.AfterEach;
@@ -20,10 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import ca.mcgill.ecse321.artgallery.dao.ArtistCrudRepository;
 import ca.mcgill.ecse321.artgallery.dao.ArtworkCrudRepository;
-import ca.mcgill.ecse321.artgallery.dao.ClientCrudRepository;
-import ca.mcgill.ecse321.artgallery.dao.InventoryCrudRepository;
 import ca.mcgill.ecse321.artgallery.dao.OrderCrudRepository;
 import ca.mcgill.ecse321.artgallery.dao.PostingCrudRepository;
 import ca.mcgill.ecse321.artgallery.dao.ProfileCrudRepository;
@@ -32,28 +27,23 @@ import ca.mcgill.ecse321.artgallery.model.Artist;
 import ca.mcgill.ecse321.artgallery.model.Artwork;
 import ca.mcgill.ecse321.artgallery.model.ArtworkType;
 import ca.mcgill.ecse321.artgallery.model.Client;
-import ca.mcgill.ecse321.artgallery.model.Inventory;
 import ca.mcgill.ecse321.artgallery.model.Order;
 import ca.mcgill.ecse321.artgallery.model.OrderStatus;
+import ca.mcgill.ecse321.artgallery.model.Posting;
 import ca.mcgill.ecse321.artgallery.model.Profile;
 import ca.mcgill.ecse321.artgallery.model.User;
+
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 public class TestArtGalleryPersistence {
-	
+
 	@Autowired
 	private UserCrudRepository userRepo;
 	@Autowired 
 	private UserRoleCrudRepository userRoleRepo;
 	@Autowired
-	private ArtistCrudRepository artistRepo;
-	@Autowired
-	private ClientCrudRepository clientRepo;
-	@Autowired
 	private ProfileCrudRepository profileRepo;
-	@Autowired
-	private InventoryCrudRepository inventoryRepo;
 	@Autowired
 	private ArtworkCrudRepository artworkRepo;
 	@Autowired
@@ -61,256 +51,482 @@ public class TestArtGalleryPersistence {
 	@Autowired
 	private OrderCrudRepository orderRepo;
 
+
 	@AfterEach
 	public void clearDatabase() {
 		orderRepo.deleteAll();
 		postingRepo.deleteAll();
 		artworkRepo.deleteAll();
-		inventoryRepo.deleteAll();
-		
 		profileRepo.deleteAll();
-		artistRepo.deleteAll();
-		clientRepo.deleteAll();
 		userRoleRepo.deleteAll();
 		userRepo.deleteAll();
-		
-	}
-	
-	@Test
-    public void testPersistAndLoadUser() {
-    
-        String name = "Neil";
-        User user1 = new User();
-        //Profile profile = new Profile();
-        //Inventory inventory = new Inventory();
-        //Client client = new Client();
-        user1.setName(name);
-        //user1.setProfile(profile);
-        //user1.setUserRole(client);
-        //user1.setInventory(inventory);
-        userRepo.save(user1);
-        long userId = user1.getId();
 
-        user1 = null;
-
-        user1 = userRepo.findUserById(userId);
-        assertNotNull(user1);
-        assertEquals(name, user1.getName());
-        //assertEquals(inventory, user1.getInventory());
-        assertEquals(name, user1.getName());
-        assertEquals(name, user1.getName());
-        assertEquals(userId, user1.getId());
-    }
-	@Test
-    public void testPersistAndLoadArtist() {
-        
-        String name = "name";
-        User user2 = new User();
-        Artist artist2 = new Artist();
-        String bio = "bio";
-        user2.setName(name);
-        userRepo.save(user2);
-        
-        long userId = user2.getId();
-        artist2.setUser(user2);
-        artist2.setBiography(bio);
-        artistRepo.save(artist2);
-        long id = artist2.getId();
-        
-        
-        
-        artist2 = null;
-        user2 = null;
-        
-        user2 = userRepo.findUserById(userId);
-        artist2 = artistRepo.findArtistById(id);
-        
-        assertNotNull(artist2);
-        assertEquals(id, artist2.getId());
-        assertEquals(bio, artist2.getBiography());
-        
-    }
-	@Test
-    public void testPersistAndLoadClient() {
-        String name = "name";
-        User user3 = new User();
-        Client client3 = new Client();
-        String address = "address";
-        user3.setName(name);
-        userRepo.save(user3);
-        long userId = user3.getId();
-        
-        client3.setUser(user3);
-        client3.setDeliveryAddress(address);
-        clientRepo.save(client3);
-        long id = client3.getId();
-        
-        client3 = null;
-        user3 = null;
-        
-        user3 = userRepo.findUserById(userId);
-        client3 = clientRepo.findClientById(id);
-        
-        assertNotNull(client3);
-        assertEquals(id, client3.getId());
-        assertEquals(address, client3.getDeliveryAddress());
-    }
-	
-	@Test
-	public void testPersistAndLoadOrder() {
-		
-		 String name = "name";
-		 User user4 = new User();
-		 user4.setName(name);
-		 userRepo.save(user4);
-		 long userId = user4.getId();
-		 
-		 String address = "address";
-		 Client client4 = new Client();
-		 client4.setDeliveryAddress(address);
-		 client4.setUser(user4);
-		 clientRepo.save(client4);
-		 long clientId = client4.getId();
-		 
-		 boolean pickup = true;
-		 Order order4 = new Order();
-		 order4.setClient(client4);
-		 order4.setInStorePickUp(pickup);
-		 order4.setOrderStatus(OrderStatus.DELIVERED);
-		 orderRepo.save(order4);
-		 long orderId = order4.getId();
-		 
-		 order4 = null;
-		 client4 = null;
-		 user4 = null;
-		 
-		 user4 = userRepo.findUserById(userId);
-		 client4 = clientRepo.findClientById(clientId);
-		 order4 = orderRepo.findOrderById(orderId);
-		 
-		 assertNotNull(order4);
-		 assertEquals(orderId, order4.getId());
 	}
-	
+
+	@Test
+	public void testPersistAndLoadUser() {
+
+		// Create user to be persisted
+		String name = "Neil";
+		User user = new User();
+		user.setName(name);
+		
+		// Save user in the repository
+		userRepo.save(user);
+		long userId = user.getId();
+
+		// Set the user object to null
+		user = null;
+
+		// Fetch the user in the repository using his Id
+		user = userRepo.findUserById(userId);
+		
+		// Check if the user object is not null
+		assertNotNull(user);
+		
+		// Check if the correct user was recovered
+		assertEquals(name, user.getName());
+		assertEquals(userId, user.getId());
+	}
+
+	@Test
+	public void testPersistAndLoadArtist() {
+
+		// Create user object
+		String name = "name";
+		User user = new User();
+		user.setName(name);
+		
+		// Save user in repository
+		userRepo.save(user);
+		long userId = user.getId();
+		
+		// Create artist userRole object
+		Artist artist = new Artist();
+		String bio = "bio";
+		artist.setUser(user);
+		artist.setBiography(bio);
+
+		// Save artist in userRole repository
+		userRoleRepo.save(artist);
+		long artistId = artist.getId();
+
+		// Set objects to null
+		user = null;
+		artist = null;
+
+		// Fetch objects in repositories with corresponding IDs
+		user = userRepo.findUserById(userId);
+		artist = (Artist) userRoleRepo.findUserRoleById(artistId);
+		
+		// Check if objects are not null
+		assertNotNull(user);
+		assertNotNull(artist);
+
+		// Assert the recovered objects are the right ones
+		assertEquals(userId, user.getId());
+
+		assertEquals(artistId, artist.getId());
+
+		assertEquals(bio, artist.getBiography());
+
+	}
+
+	@Test
+	public void testPersistAndLoadClient() {
+
+		// Create user object
+		String name = "name";
+		User user = new User();
+		user.setName(name);
+		
+		// Save user in repository
+		userRepo.save(user);
+		long userId = user.getId();
+
+		// Create client userRole object
+		Client client = new Client();
+		String address = "address";
+		client.setUser(user);
+		client.setDeliveryAddress(address);
+
+		// Save client in userRole repository
+		userRoleRepo.save(client);
+		long id = client.getId();
+
+		// Set all objects to null
+		client = null;
+		user = null;
+
+		// Recover objects in the repositories
+		user = userRepo.findUserById(userId);
+		client = (Client) userRoleRepo.findUserRoleById(id);
+
+		// Assert user is not null and has the correct id
+		assertNotNull(user);
+		assertEquals(userId, user.getId());
+
+		// Assert client is not null, and is the corresponding client
+		assertNotNull(client);
+		assertEquals(id, client.getId());
+		assertEquals(address, client.getDeliveryAddress());
+
+	}
+
 	@Test
 	public void testPersistAndLoadProfile() {
-		
+
+		// Create user object
 		String name = "name";
-		User user5 = new User();
-		user5.setName(name);
-		userRepo.save(user5);
-		long userId = user5.getId();
-		 
+		User user = new User();
+		user.setName(name);
+		
+		// Persist user object in the repository
+		userRepo.save(user);
+		long userId = user.getId();
+
+		// Create profile
 		String email = "neil.banik@mail.mcgill.ca";
-		String username = "username";
-		boolean artist = true;
+		String username = "neilbanik";
 		String phone = "1-800-696-9420";
 		String password = "**********";
 		Profile profile = new Profile();
 		profile.setEmailAddress(email);
-		profile.setIsArtistProfile(artist);
+		profile.setIsArtistProfile(true);
 		profile.setPassword(password);
 		profile.setPhoneNumber(phone);
-		profile.setUser(user5);
+		profile.setUser(user);
 		profile.setUsername(username);
+		
+		// Save profile in repository
 		profileRepo.save(profile);
 		
+		// Set objects to null
 		profile = null;
-		user5 = null;
-		
-		user5 = userRepo.findUserById(userId);
+		user = null;
+
+		// Recover objects from repositories
+		user = userRepo.findUserById(userId);
 		profile = profileRepo.findProfileByUsername(username);
-		
+
+		// Assertions to check if the recovered objects are not null
+		// and correspond to query
+		assertNotNull(user);
+		assertEquals(userId, user.getId());
 		assertNotNull(profile);
 		assertEquals(email, profile.getEmailAddress());
 		assertEquals(username, profile.getUsername());
 		assertEquals(phone, profile.getPhoneNumber());
 		assertEquals(password, profile.getPassword());
+
 	}
-	
+
 	@Test
-	public void testPersistAndLoadInventory() {
+	public void testPersistAndLoadArtwork() {
+
+		// Create user
+		String name = "Thais";
+		User user = new User();
+		user.setName(name);
+
+		// Persist user in database
+		userRepo.save(user);
+		long userId = user.getId();
+
+		// Create userRole of artist
+		Artist artist = new Artist();
+		String bio = "bio";
+		artist.setUser(user);
+		artist.setBiography(bio);
 		
-		String name = "name";
-		User user6 = new User();
-		user6.setName(name);
-		userRepo.save(user6);
-		long userId = user6.getId();
-		Set<User> users = Collections.emptySet();;
-		users.add(user6);
-		
-		Inventory inventory = new Inventory();
-		inventory.setUsers(users);
-		inventoryRepo.save(inventory);
-		long invenId = inventory.getId();
-		
-		inventory = null;
-		user6 = null;
-		
-		user6 = userRepo.findUserById(userId);
-		inventory = inventoryRepo.findInventoryById(invenId);
-		
-		assertNotNull(inventory);
-		assertEquals(invenId, inventory.getId());
-		assertEquals(users, inventory.getUsers());
-	}
-	@Test
-    public void testPersistAndLoadArtwork() {
-		
+		// Create set of artworks for the artist
+		Set<Artwork> artworks = new HashSet<Artwork>();
+		artist.setArtworks(artworks);
+
+		// Save artist in userRole repository
+		userRoleRepo.save(artist);
+		long artistId = artist.getId();
+
+		// Create artwork
 		Date date = java.sql.Date.valueOf(LocalDate.of(2020, Month.APRIL, 20));
-        String name = "name";
-        String paintingName = "YEET";
-        String description ="MHHHHHHHMMMM veryyy nice artwooooork";
-        
-        User user2 = new User();
-        user2.setName(name);
-        userRepo.save(user2);
-        long userId = user2.getId();
-        System.err.println("BONK");
+		String paintingName = "Joconde";
+		String description = "Louvre";
+		Artwork artwork = new Artwork();
+		artwork.setDescription(description);
+		artwork.setArtworkType(ArtworkType.FRESCO_PAINTING);
+		artwork.setName(paintingName);
+		artwork.setDate(date);
+		artwork.setCreator(artist);
+		artist.addArtwork(artwork);
 
-        Artist artist2 = new Artist();
-        String bio = "bio";
-        artist2.setUser(user2);
-        artist2.setBiography(bio);
-        artistRepo.save(artist2);
-        long id = artist2.getId();
-        System.err.println("BONK1");
-        
+		// Save artwork in the repository
+		artworkRepo.save(artwork);
+		long artId = artwork.getId();
 
-        Artwork artwork = new Artwork();
-        artwork.setCreator(artist2);
-        artwork.setDescription(description);
-        artwork.setArtworkType(ArtworkType.FRESCO_PAINTING);
-        artwork.setName(paintingName);
-        artwork.setDate(date);
-        System.err.println("BONK2");
+		// Set all the objects to null
+		artwork = null;
+		artist = null;
+		user = null;
 
-       
-        artworkRepo.save(artwork);
-        System.err.println("BONK3");
+		// Recover all objects by fetching inside the repositories
+		user = userRepo.findUserById(userId);
+		artist = (Artist) userRoleRepo.findUserRoleById(artistId);
+		artwork = artworkRepo.findArtworkById(artId);
 
-        long artid = artwork.getId();
-        System.err.println("BONK4");
+		// Assert objects are not null
+		assertNotNull(user);
+		assertNotNull(artist);
+		assertNotNull(artwork);
 
-        artwork = null;
-        artist2 = null;
-        user2 = null;
-        
-        
-        user2 = userRepo.findUserById(userId);
-        artist2 = artistRepo.findArtistById(id);
-        artwork = artworkRepo.findArtworkById(artid);
-        
-        assertNotNull(artwork);
-        assertEquals(artid, artwork.getId());
-        assertEquals(date, artwork.getDate());
-        assertEquals(description, artwork.getDescription());
-        assertEquals(paintingName, artwork.getName());
-        assertEquals(artist2, artwork.getCreator());
+		// Assert objects correspond to query 
+		assertEquals(userId, user.getId());
+		assertEquals(artistId, artist.getId());
+
+		assertEquals(artId, artwork.getId());
+		assertEquals(date, artwork.getDate());
+		assertEquals(description, artwork.getDescription());
+		assertEquals(paintingName, artwork.getName());
+		assertEquals(artist.getId(), artwork.getCreator().getId());
+
+	}
 
 
+	@Test
+	public void testPersistAndLoadPosting() {
+		
+		// Create user
+		String name = "Zoé";
+		User user = new User();
+		user.setName(name);
+
+		// Save user
+		userRepo.save(user);
+		long userId = user.getId();
+
+		// Create Artist
+		Artist artist = new Artist();
+		String bio = "bio";
+		artist.setUser(user);
+		artist.setBiography(bio);
+		Set<Artwork> artworks = new HashSet<Artwork>();
+		artist.setArtworks(artworks);
+
+		// Save artist
+		userRoleRepo.save(artist);
+		long artistId = artist.getId();
+
+		// Create artwork
+		Date date = java.sql.Date.valueOf(LocalDate.of(2020, Month.APRIL, 20));
+		String paintingName = "Joconde";
+		String description = "Louvre";
+		Artwork artwork = new Artwork();
+		artwork.setDescription(description);
+		artwork.setArtworkType(ArtworkType.FRESCO_PAINTING);
+		artwork.setName(paintingName);
+		artwork.setDate(date);
+		artwork.setCreator(artist);
+		artist.addArtwork(artwork);
+
+		// Save artwork
+		artworkRepo.save(artwork);
+		long artId = artwork.getId();
+
+		// Create posting
+		double price = 5000;
+		Posting post = new Posting();
+		post.setVisibility(true);
+		post.setItem(artwork);
+		post.setPrice(price);
+		
+		// Persist posting in the database
+		postingRepo.save(post);
+		long postId = post.getId();
+
+		// Set all objects to null
+		post = null;
+		artwork = null;
+		artist = null;
+		user = null;
+
+		// Recover objects from the database
+		user = userRepo.findUserById(userId);
+		artist = (Artist) userRoleRepo.findUserRoleById(artistId);
+		artwork = artworkRepo.findArtworkById(artId);
+		post = postingRepo.findPostingById(postId);
+
+		// Assert they are not null
+		assertNotNull(user);
+		assertNotNull(artist);
+		assertNotNull(artwork);
+		assertNotNull(post);
+
+		// Check if objects correspond to query
+		assertEquals(postId, post.getId());
+		assertEquals(post.getItem().getId(), artwork.getId());
+
+	}
 
 
-        
-    }
+	@Test
+	public void testPersistAndLoadOrder() {
+
+		// Create first user for client
+		String clientName = "Morgane";
+		User clientUser = new User();
+		clientUser.setName(clientName);
+		
+		// Save first user in repository
+		userRepo.save(clientUser);
+		long userClientId = clientUser.getId();
+
+		// Create second user for artist
+		String artistName = "Alexandra";
+		User artistUser = new User();
+		artistUser.setName(artistName);
+		
+		// Save second user in repository
+		userRepo.save(artistUser);
+		long userArtistId = artistUser.getId();
+
+		// Create client userRole
+		String address = "address";
+		Client clientRole = new Client();
+		clientRole.setDeliveryAddress(address);
+		clientRole.setUser(clientUser);
+		
+		// Save client in repository
+		userRoleRepo.save(clientRole);
+		long clientId = clientRole.getId();
+
+		// Create artist userRole
+		String bio = "design";
+		Artist artistRole = new Artist();
+		artistRole.setBiography(bio);
+		artistRole.setUser(artistUser);
+		
+		// Save artist in repository
+		userRoleRepo.save(artistRole);
+		long artistId = artistRole.getId();
+
+		// Create set for the artist's artworks
+		Set<Artwork> artworks = new HashSet<Artwork>();
+		artistRole.setArtworks(artworks);
+
+		// Create first artwork
+		Date date = java.sql.Date.valueOf(LocalDate.of(2000, Month.NOVEMBER, 2));
+		String paintingName = "The Starry Night";
+		String description ="New York MoMa";
+		Artwork item = new Artwork();
+		item.setArtworkType(ArtworkType.ACRYLIC_PAINTING);
+		item.setCreator(artistRole);
+		artistRole.addArtwork(item);
+		item.setDate(date);
+		item.setDescription(description);
+		item.setName(paintingName);
+		
+		// Save artwork inside repository
+		artworkRepo.save(item);
+		long artworkId = item.getId();
+
+		// Create first posting
+		Posting post = new Posting();
+		post.setVisibility(true);
+		post.setItem(item);
+		post.setPrice(5000);
+		
+		// Create second artwork
+		Date date2 = java.sql.Date.valueOf(LocalDate.of(2003, Month.AUGUST, 27));
+		String paintingName2 = "No Idea";
+		String description2 ="Cubism";
+		Artwork item2 = new Artwork();
+		item2.setArtworkType(ArtworkType.DRAWING);
+		item2.setCreator(artistRole);
+		artistRole.addArtwork(item2);
+		item2.setDate(date2);
+		item2.setDescription(description2);
+		item2.setName(paintingName2);
+		
+		
+		// Save artwork inside repository
+		artworkRepo.save(item2);
+		long artwork2Id = item.getId();
+		
+		// Create second posting
+		Posting post2 = new Posting();
+		post2.setVisibility(true);
+		post2.setItem(item2);
+		post2.setPrice(50300);
+		
+		
+		// Create order
+		Order order = new Order();
+		order.setClient(clientRole);
+		order.setInStorePickUp(true);
+		order.setOrderStatus(OrderStatus.IN_PROCESS);
+		
+		// Create set of postings for the order
+		Set<Posting> items = new HashSet<Posting>();
+		order.setItems(items);
+		
+		// Save order in repository
+		orderRepo.save(order);
+		long orderId = order.getId();
+		
+		// Link order to posting
+		items.add(post);
+		items.add(post2);
+		post.setOrder(order);
+		post2.setOrder(order);
+		
+		// Save postings inside repository
+		postingRepo.save(post);
+		long postId = post.getId();
+		postingRepo.save(post2);
+		long post2Id = post2.getId();
+		
+
+		// Set all objects to null
+		order = null;
+		post = null;
+		post2 = null;
+		item = null;
+		item2 = null;
+		clientRole = null;
+		artistRole = null;
+		clientUser = null;
+		artistUser = null;
+		
+
+		// Fetch all objects in the repositories
+		artistUser = userRepo.findUserById(userArtistId);
+		clientUser = userRepo.findUserById(userClientId);
+		artistRole = (Artist) userRoleRepo.findUserRoleById(artistId);
+		clientRole = (Client) userRoleRepo.findUserRoleById(clientId);
+		item = artworkRepo.findArtworkById(artworkId);
+		item2 = artworkRepo.findArtworkById(artwork2Id);
+		post = postingRepo.findPostingById(postId);
+		post2 = postingRepo.findPostingById(post2Id);
+		order = orderRepo.findOrderById(orderId);
+
+		// Check that all objects are not null
+		assertNotNull(artistUser);
+		assertNotNull(clientUser);
+		assertNotNull(artistRole);
+		assertNotNull(clientRole);
+		assertNotNull(item);
+		assertNotNull(item2);
+		assertNotNull(post);
+		assertNotNull(post2);
+		assertNotNull(order);
+		
+		assertEquals(orderId, order.getId());
+		assertThat(order.getItems().size() == 2);
+		assertEquals(order.getClient().getId(), clientRole.getId());
+		
+	
+		
+	}
+
+
+
 }

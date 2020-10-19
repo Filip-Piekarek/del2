@@ -62,18 +62,6 @@ public class User{
 		this.profile = profile;
 	}
 
-	
-	private Inventory inventory;
-
-	@ManyToOne(optional=true)
-	public Inventory getInventory() {
-		return this.inventory;
-	}
-
-	public void setInventory(Inventory inventory) {
-		this.inventory = inventory;
-	}
-
 
 
 }

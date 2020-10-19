@@ -10,14 +10,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
 
 
 @Entity
 public class Artist extends UserRole{
     
     @Id
-    @Column(unique=true)
+    @Column
     private long id;
 
     public void setId(long value) {
@@ -38,6 +37,10 @@ public class Artist extends UserRole{
 
     public void setArtworks(Set<Artwork> artworkss) {
         this.artworks = artworkss;
+    }
+    
+    public void addArtwork(Artwork artwork) {
+    	this.artworks.add(artwork);
     }
 
     @Column

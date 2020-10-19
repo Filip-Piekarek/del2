@@ -1,8 +1,10 @@
 package ca.mcgill.ecse321.artgallery.model;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.OneToOne;
@@ -13,11 +15,24 @@ import java.sql.Date;
 @Entity
 @Table(name="artworks")
 public class Artwork{
+	
+	@Id
+    @Column(unique=true)
+    private long id;
+
+    public void setId(long value) {
+        this.id = value;
+    }
     
-    @Column
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    public long getId() {
+        return this.id;
+    }
+    
     private Artist creator;
     
-    @OneToOne(optional=false)
+    @ManyToOne(fetch = FetchType.LAZY, optional=false)
     public Artist getCreator() {
         return this.creator;
     }
@@ -61,19 +76,6 @@ public class Artwork{
     }
     
     
-    @Id
-    @Column(unique=true)
-    private long id;
-
-    public void setId(long value) {
-        this.id = value;
-    }
-    
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    public long getId() {
-        return this.id;
-    }
     
     
     @Enumerated

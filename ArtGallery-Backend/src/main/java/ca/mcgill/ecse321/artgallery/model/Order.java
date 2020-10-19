@@ -1,8 +1,10 @@
 package ca.mcgill.ecse321.artgallery.model;
 import javax.persistence.Id;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.ManyToOne;
@@ -25,11 +27,10 @@ public class Order{
 	public void setClient(Client client) {
 		this.client = client;
 	}
-
 	
 	private Set<Posting> items;
 
-	@OneToMany(mappedBy="order")
+	@OneToMany(mappedBy="order", fetch=FetchType.EAGER, cascade= {CascadeType.ALL})
 	public Set<Posting> getItems() {
 		return this.items;
 	}
@@ -37,6 +38,12 @@ public class Order{
 	public void setItems(Set<Posting> itemss) {
 		this.items = itemss;
 	}
+	
+	public void addItem(Posting item) {
+		this.items.add(item);
+	}
+	
+
 
 	@Id
 	@Column(unique=true)
