@@ -526,7 +526,4 @@ public class TestArtGalleryPersistence {
 	
 		
 	}
-
-
-
 }

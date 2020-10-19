@@ -19,11 +19,11 @@ The main goal of this project is to connect local artists with potential buyers 
  
 | Team member| Total hours| Responsibility |
 |------------------ |:-------------:| ---------------|
-| Alixe Delabrousse| x hours | Domain Model| 
-| Eric Guan| x hours| Database set up and testing|
-| Omar Hussain| x hours | Build and CI|
-| Filip Piekarek| x hours | Requirements Model|
-| Patrick Juneau| x hours  | Database set up and testing|
+| Alixe Delabrousse| 16 hours | Domain Model| 
+| Eric Guan| 19 hours| Database set up and testing|
+| Omar Hussain| 12 hours | Build and CI|
+| Filip Piekarek| 5 hours | Requirements Model|
+| Patrick Juneau| 19 hours  | Database set up and testing|
 
 
 The report of this deliverable can be found [here](https://github.com/McGill-ECSE321-Fall2020/project-group-14/wiki/Sprint-1).
