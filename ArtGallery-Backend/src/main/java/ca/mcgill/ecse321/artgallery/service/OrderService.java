@@ -11,10 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import ca.mcgill.ecse321.artgallery.dao.ArtistCrudRepository;
 import ca.mcgill.ecse321.artgallery.dao.ArtworkCrudRepository;
-import ca.mcgill.ecse321.artgallery.dao.ClientCrudRepository;
-import ca.mcgill.ecse321.artgallery.dao.InventoryCrudRepository;
 import ca.mcgill.ecse321.artgallery.dao.OrderCrudRepository;
 import ca.mcgill.ecse321.artgallery.dao.PostingCrudRepository;
 import ca.mcgill.ecse321.artgallery.dao.ProfileCrudRepository;
@@ -32,13 +29,8 @@ public class OrderService {
 	@Autowired 
 	private UserRoleCrudRepository userRoleRepo;
 	@Autowired
-	private ArtistCrudRepository artistRepo;
-	@Autowired
-	private ClientCrudRepository clientRepo;
-	@Autowired
 	private ProfileCrudRepository profileRepo;
-	@Autowired
-	private InventoryCrudRepository inventoryRepo;
+
 	@Autowired
 	private ArtworkCrudRepository artworkRepo;
 	@Autowired
