@@ -23,6 +23,10 @@ public class ArtworkDto {
 		return id;
 	}
 	
+	public void setId(long id) {
+		this.id = id;
+	}
+	
 	public ArtistDto getArtist() {
 		return creator;
 	}
