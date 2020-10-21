@@ -2,11 +2,12 @@ package ca.mcgill.ecse321.artgallery.model;
 
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
 
 @Entity
 public class Client extends UserRole{
@@ -23,8 +24,6 @@ public class Client extends UserRole{
 		return this.id;
 	}
 
-	
-	
 	private Set<Order> orders;
 
 	@OneToMany(mappedBy="client")
@@ -36,14 +35,16 @@ public class Client extends UserRole{
 		this.orders = orderss;
 	}
 
-	@Column
-	private String deliveryAddress;
 
-	public void setDeliveryAddress(String value) {
-		this.deliveryAddress = value;
+	 private Set<Address> addresses;
+
+	@OneToMany(mappedBy="client", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	public Set<Address> getAddresses() {
+		return this.addresses;
 	}
-	
-	public String getDeliveryAddress() {
-		return this.deliveryAddress;
+
+	public void setAddresses(Set<Address> addresses) {
+		this.addresses = addresses;
 	}
+
 }

@@ -1,7 +1,6 @@
 package ca.mcgill.ecse321.artgallery.dao;
 
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -23,6 +22,7 @@ import ca.mcgill.ecse321.artgallery.dao.OrderCrudRepository;
 import ca.mcgill.ecse321.artgallery.dao.PostingCrudRepository;
 import ca.mcgill.ecse321.artgallery.dao.ProfileCrudRepository;
 import ca.mcgill.ecse321.artgallery.dao.UserCrudRepository;
+import ca.mcgill.ecse321.artgallery.model.Address;
 import ca.mcgill.ecse321.artgallery.model.Artist;
 import ca.mcgill.ecse321.artgallery.model.Artwork;
 import ca.mcgill.ecse321.artgallery.model.ArtworkType;
@@ -43,6 +43,8 @@ public class TestArtGalleryPersistence {
 	@Autowired 
 	private UserRoleCrudRepository userRoleRepo;
 	@Autowired
+	private AddressCrudRepository addressRepo;
+	@Autowired
 	private ProfileCrudRepository profileRepo;
 	@Autowired
 	private ArtworkCrudRepository artworkRepo;
@@ -58,6 +60,7 @@ public class TestArtGalleryPersistence {
 		postingRepo.deleteAll();
 		artworkRepo.deleteAll();
 		profileRepo.deleteAll();
+		addressRepo.deleteAll();
 		userRoleRepo.deleteAll();
 		userRepo.deleteAll();
 
@@ -70,7 +73,7 @@ public class TestArtGalleryPersistence {
 		String name = "Neil";
 		User user = new User();
 		user.setName(name);
-		
+
 		// Save user in the repository
 		userRepo.save(user);
 		long userId = user.getId();
@@ -80,10 +83,10 @@ public class TestArtGalleryPersistence {
 
 		// Fetch the user in the repository using his Id
 		user = userRepo.findUserById(userId);
-		
+
 		// Check if the user object is not null
 		assertNotNull(user);
-		
+
 		// Check if the correct user was recovered
 		assertEquals(name, user.getName());
 		assertEquals(userId, user.getId());
@@ -96,11 +99,11 @@ public class TestArtGalleryPersistence {
 		String name = "name";
 		User user = new User();
 		user.setName(name);
-		
+
 		// Save user in repository
 		userRepo.save(user);
 		long userId = user.getId();
-		
+
 		// Create artist userRole object
 		Artist artist = new Artist();
 		String bio = "bio";
@@ -118,7 +121,7 @@ public class TestArtGalleryPersistence {
 		// Fetch objects in repositories with corresponding IDs
 		user = userRepo.findUserById(userId);
 		artist = (Artist) userRoleRepo.findUserRoleById(artistId);
-		
+
 		// Check if objects are not null
 		assertNotNull(user);
 		assertNotNull(artist);
@@ -139,28 +142,50 @@ public class TestArtGalleryPersistence {
 		String name = "name";
 		User user = new User();
 		user.setName(name);
-		
+
 		// Save user in repository
 		userRepo.save(user);
 		long userId = user.getId();
 
 		// Create client userRole object
 		Client client = new Client();
-		String address = "address";
-		client.setUser(user);
-		client.setDeliveryAddress(address);
 
+		// Create set of addresses for client
+		Set<Address> addresses = new HashSet<Address>();
+		client.setAddresses(addresses);
+
+		// Create new address
+		Address address = new Address();
+		address.setStreetNumber(4728);
+		address.setStreetName("Peel St");
+		address.setCity("Montreal");
+		address.setProvince("Quebec");
+		address.setCountry("CANADA");
+		address.setPostalCode("H4A 1C4");
+		address.setClient(client);
+
+		client.setUser(user);
+		client.getAddresses().add(address);
+		
 		// Save client in userRole repository
 		userRoleRepo.save(client);
 		long id = client.getId();
 
+		// Save address in Address repository
+		addressRepo.save(address);
+		long addressId = address.getId();
+
 		// Set all objects to null
+		address = null;
 		client = null;
 		user = null;
 
 		// Recover objects in the repositories
 		user = userRepo.findUserById(userId);
 		client = (Client) userRoleRepo.findUserRoleById(id);
+		address = addressRepo.findAddressById(addressId);
+
+
 
 		// Assert user is not null and has the correct id
 		assertNotNull(user);
@@ -169,9 +194,78 @@ public class TestArtGalleryPersistence {
 		// Assert client is not null, and is the corresponding client
 		assertNotNull(client);
 		assertEquals(id, client.getId());
-		assertEquals(address, client.getDeliveryAddress());
+		assertEquals(address.getClient().getId(), client.getId());
 
 	}
+
+	@Test
+	public void testPersistAndLoadAddress() {
+
+		// Create user object
+		String name = "name";
+		User user = new User();
+		user.setName(name);
+
+		// Save user in repository
+		userRepo.save(user);
+		long userId = user.getId();
+
+		// Create client userRole object
+		Client client = new Client();
+
+		// Create set of addresses for client
+		Set<Address> addresses = new HashSet<Address>();
+		client.setAddresses(addresses);
+
+		// Create new address
+		Address address = new Address();
+		address.setStreetNumber(4728);
+		address.setStreetName("Peel St");
+		address.setCity("Montreal");
+		address.setProvince("Quebec");
+		address.setCountry("CANADA");
+		address.setPostalCode("H4A 1C4");
+		address.setClient(client);
+
+		client.setUser(user);
+		client.getAddresses().add(address);
+
+		// Save client in userRole repository
+		userRoleRepo.save(client);
+		long clientId = client.getId();
+
+		// Save address in Address repository
+		addressRepo.save(address);
+		long addressId = address.getId();
+
+
+
+		// Set all objects to null
+		address = null;
+		client = null;
+		user = null;
+
+		// Find the objects in the repositories
+		user = userRepo.findUserById(userId);
+		client = (Client) userRoleRepo.findUserRoleById(clientId);
+		address = addressRepo.findAddressById(addressId);
+
+		assertNotNull(user);
+		assertNotNull(client);
+		assertNotNull(address);
+
+		assertEquals(addressId, address.getId());
+		assertEquals(4728, address.getStreetNumber());
+		assertEquals("Peel St", address.getStreetName());
+		assertEquals("Montreal", address.getCity());
+		assertEquals("Quebec", address.getProvince());
+		assertEquals("CANADA", address.getCountry());
+		assertEquals("H4A 1C4", address.getPostalCode());
+		assertEquals(client.getId(), address.getClient().getId());		
+
+
+	}
+
 
 	@Test
 	public void testPersistAndLoadProfile() {
@@ -180,7 +274,7 @@ public class TestArtGalleryPersistence {
 		String name = "name";
 		User user = new User();
 		user.setName(name);
-		
+
 		// Persist user object in the repository
 		userRepo.save(user);
 		long userId = user.getId();
@@ -197,10 +291,10 @@ public class TestArtGalleryPersistence {
 		profile.setPhoneNumber(phone);
 		profile.setUser(user);
 		profile.setUsername(username);
-		
+
 		// Save profile in repository
 		profileRepo.save(profile);
-		
+
 		// Set objects to null
 		profile = null;
 		user = null;
@@ -238,7 +332,7 @@ public class TestArtGalleryPersistence {
 		String bio = "bio";
 		artist.setUser(user);
 		artist.setBiography(bio);
-		
+
 		// Create set of artworks for the artist
 		Set<Artwork> artworks = new HashSet<Artwork>();
 		artist.setArtworks(artworks);
@@ -293,7 +387,7 @@ public class TestArtGalleryPersistence {
 
 	@Test
 	public void testPersistAndLoadPosting() {
-		
+
 		// Create user
 		String name = "Zoé";
 		User user = new User();
@@ -337,7 +431,7 @@ public class TestArtGalleryPersistence {
 		post.setVisibility(true);
 		post.setItem(artwork);
 		post.setPrice(price);
-		
+
 		// Persist posting in the database
 		postingRepo.save(post);
 		long postId = post.getId();
@@ -374,7 +468,7 @@ public class TestArtGalleryPersistence {
 		String clientName = "Morgane";
 		User clientUser = new User();
 		clientUser.setName(clientName);
-		
+
 		// Save first user in repository
 		userRepo.save(clientUser);
 		long userClientId = clientUser.getId();
@@ -383,27 +477,45 @@ public class TestArtGalleryPersistence {
 		String artistName = "Alexandra";
 		User artistUser = new User();
 		artistUser.setName(artistName);
-		
+
 		// Save second user in repository
 		userRepo.save(artistUser);
 		long userArtistId = artistUser.getId();
 
 		// Create client userRole
-		String address = "address";
 		Client clientRole = new Client();
-		clientRole.setDeliveryAddress(address);
-		clientRole.setUser(clientUser);
 		
+		// Create set of addresses for client
+		Set<Address> addresses = new HashSet<Address>();
+		clientRole.setAddresses(addresses);
+
+		// Create new address
+		Address address = new Address();
+		address.setStreetNumber(4728);
+		address.setStreetName("Peel St");
+		address.setCity("Montreal");
+		address.setProvince("Quebec");
+		address.setCountry("CANADA");
+		address.setPostalCode("H4A 1C4");
+		address.setClient(clientRole);
+
+		clientRole.setUser(clientUser);
+		clientRole.getAddresses().add(address);
+
 		// Save client in repository
 		userRoleRepo.save(clientRole);
 		long clientId = clientRole.getId();
+
+		// Save address in Address repository
+		addressRepo.save(address);
+		long addressId = address.getId();
 
 		// Create artist userRole
 		String bio = "design";
 		Artist artistRole = new Artist();
 		artistRole.setBiography(bio);
 		artistRole.setUser(artistUser);
-		
+
 		// Save artist in repository
 		userRoleRepo.save(artistRole);
 		long artistId = artistRole.getId();
@@ -423,7 +535,7 @@ public class TestArtGalleryPersistence {
 		item.setDate(date);
 		item.setDescription(description);
 		item.setName(paintingName);
-		
+
 		// Save artwork inside repository
 		artworkRepo.save(item);
 		long artworkId = item.getId();
@@ -433,7 +545,7 @@ public class TestArtGalleryPersistence {
 		post.setVisibility(true);
 		post.setItem(item);
 		post.setPrice(5000);
-		
+
 		// Create second artwork
 		Date date2 = java.sql.Date.valueOf(LocalDate.of(2003, Month.AUGUST, 27));
 		String paintingName2 = "No Idea";
@@ -445,47 +557,48 @@ public class TestArtGalleryPersistence {
 		item2.setDate(date2);
 		item2.setDescription(description2);
 		item2.setName(paintingName2);
-		
-		
+
+
 		// Save artwork inside repository
 		artworkRepo.save(item2);
 		long artwork2Id = item.getId();
-		
+
 		// Create second posting
 		Posting post2 = new Posting();
 		post2.setVisibility(true);
 		post2.setItem(item2);
 		post2.setPrice(50300);
-		
-		
+
+
 		// Create order
 		Order order = new Order();
 		order.setClient(clientRole);
 		order.setInStorePickUp(true);
 		order.setOrderStatus(OrderStatus.IN_PROCESS);
-		
+
 		// Create set of postings for the order
 		Set<Posting> items = new HashSet<Posting>();
 		order.setItems(items);
-		
+
 		// Save order in repository
 		orderRepo.save(order);
 		long orderId = order.getId();
-		
+
 		// Link order to posting
 		items.add(post);
 		items.add(post2);
 		post.setOrder(order);
 		post2.setOrder(order);
-		
+
 		// Save postings inside repository
 		postingRepo.save(post);
 		long postId = post.getId();
 		postingRepo.save(post2);
 		long post2Id = post2.getId();
-		
+
 
 		// Set all objects to null
+		address = null;
 		order = null;
 		post = null;
 		post2 = null;
@@ -495,13 +608,14 @@ public class TestArtGalleryPersistence {
 		artistRole = null;
 		clientUser = null;
 		artistUser = null;
-		
+
 
 		// Fetch all objects in the repositories
 		artistUser = userRepo.findUserById(userArtistId);
 		clientUser = userRepo.findUserById(userClientId);
 		artistRole = (Artist) userRoleRepo.findUserRoleById(artistId);
 		clientRole = (Client) userRoleRepo.findUserRoleById(clientId);
+		address = addressRepo.findAddressById(addressId);
 		item = artworkRepo.findArtworkById(artworkId);
 		item2 = artworkRepo.findArtworkById(artwork2Id);
 		post = postingRepo.findPostingById(postId);
@@ -513,17 +627,19 @@ public class TestArtGalleryPersistence {
 		assertNotNull(clientUser);
 		assertNotNull(artistRole);
 		assertNotNull(clientRole);
+		assertNotNull(address);
 		assertNotNull(item);
 		assertNotNull(item2);
 		assertNotNull(post);
 		assertNotNull(post2);
 		assertNotNull(order);
-		
+
 		assertEquals(orderId, order.getId());
-		assertThat(order.getItems().size() == 2);
+		assertEquals(post.getOrder().getId(), order.getId());
+		assertEquals(post2.getOrder().getId(), order.getId());
 		assertEquals(order.getClient().getId(), clientRole.getId());
-		
-	
-		
+
+
+
 	}
 }
