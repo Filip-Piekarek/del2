@@ -11,7 +11,7 @@ import ca.mcgill.ecse321.artgallery.dao.UserCrudRepository;
 import ca.mcgill.ecse321.artgallery.dao.UserRoleCrudRepository;
 
 @Service
-public class ArtworkPostingService {
+public class ArtworkService {
 	
 	@Autowired
 	private UserCrudRepository userRepo;
