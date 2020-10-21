@@ -1,6 +1,7 @@
 package ca.mcgill.ecse321.artgallery.dao;
 
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -431,7 +432,9 @@ public class TestArtGalleryPersistence {
 		post.setVisibility(true);
 		post.setItem(artwork);
 		post.setPrice(price);
-
+		post.setIsOnline(true);
+		post.setPriority(0);
+		
 		// Persist posting in the database
 		postingRepo.save(post);
 		long postId = post.getId();
@@ -545,6 +548,8 @@ public class TestArtGalleryPersistence {
 		post.setVisibility(true);
 		post.setItem(item);
 		post.setPrice(5000);
+		post.setIsOnline(true);
+		post.setPriority(0);
 
 		// Create second artwork
 		Date date2 = java.sql.Date.valueOf(LocalDate.of(2003, Month.AUGUST, 27));
@@ -568,7 +573,8 @@ public class TestArtGalleryPersistence {
 		post2.setVisibility(true);
 		post2.setItem(item2);
 		post2.setPrice(50300);
-
+		post2.setIsOnline(true);
+		post2.setPriority(0);
 
 		// Create order
 		Order order = new Order();
@@ -584,6 +590,12 @@ public class TestArtGalleryPersistence {
 		orderRepo.save(order);
 		long orderId = order.getId();
 
+		// Assert posting is available online
+		assertThat(post.isIsOnline());
+		assertThat(post2.isIsOnline());
+		assertThat(post.isVisibility());
+		assertThat(post2.isVisibility());
+		
 		// Link order to posting
 		items.add(post);
 		items.add(post2);

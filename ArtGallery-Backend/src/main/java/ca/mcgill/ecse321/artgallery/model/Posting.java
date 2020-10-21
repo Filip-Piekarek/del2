@@ -12,7 +12,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name="postings")
 public class Posting{
-	
+
 	@Column
 	private Order order;
 
@@ -36,18 +36,18 @@ public class Posting{
 	public void setItem(Artwork item) {
 		this.item = item;
 	}
-	
+
 	@Column
 	private double price;
-	
+
 	public double getPrice() {
 		return this.price;
 	}
-	
+
 	public void setPrice(double price) {
 		this.price = price;
 	}
-	
+
 	@Id
 	@Column(unique=true)
 	private long id;
@@ -60,7 +60,8 @@ public class Posting{
 	public long getId() {
 		return this.id;
 	}
-	
+
+	@Column
 	private boolean visibility;
 
 	public void setVisibility(boolean value) {
@@ -70,4 +71,24 @@ public class Posting{
 		return this.visibility;
 	}
 	
+	@Column
+	private boolean isOnline;
+
+	public void setIsOnline(boolean value) {
+		this.isOnline = value;
+	}
+	public boolean isIsOnline() {
+		return this.isOnline;
+	}
+	
+	@Column
+	private int priority;
+
+	public void setPriority(int value) {
+		this.priority = value;
+	}
+	public int getPriority() {
+		return this.priority;
+	}
+
 }
