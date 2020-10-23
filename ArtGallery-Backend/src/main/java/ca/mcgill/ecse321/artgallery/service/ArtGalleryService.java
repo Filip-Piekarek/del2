@@ -18,12 +18,14 @@ import ca.mcgill.ecse321.artgallery.dao.PostingCrudRepository;
 import ca.mcgill.ecse321.artgallery.dao.ProfileCrudRepository;
 import ca.mcgill.ecse321.artgallery.dao.UserCrudRepository;
 import ca.mcgill.ecse321.artgallery.dao.UserRoleCrudRepository;
+import ca.mcgill.ecse321.artgallery.model.Artist;
 import ca.mcgill.ecse321.artgallery.model.Artwork;
 import ca.mcgill.ecse321.artgallery.model.Client;
 import ca.mcgill.ecse321.artgallery.model.Order;
 import ca.mcgill.ecse321.artgallery.model.OrderStatus;
 import ca.mcgill.ecse321.artgallery.model.Posting;
 import ca.mcgill.ecse321.artgallery.model.User;
+import ca.mcgill.ecse321.artgallery.model.UserRole;
 
 @Service
 public class ArtGalleryService {
@@ -34,7 +36,6 @@ public class ArtGalleryService {
 	private UserRoleCrudRepository userRoleRepo;
 	@Autowired
 	private ProfileCrudRepository profileRepo;
-
 	@Autowired
 	private ArtworkCrudRepository artworkRepo;
 	@Autowired
@@ -42,17 +43,44 @@ public class ArtGalleryService {
 	@Autowired
 	private OrderCrudRepository orderRepo;
 
+	//Service methods for Artist
+	@Transactional
+	public Artist createArtist(User user, String bio) {
+		
+		// Create artist userRole
+		Artist artist = new Artist();
+		artist.setBiography(bio);
+		artist.setUser(user);
+				
+		// Save artist in repository
+		userRoleRepo.save(artist);
+		
+		return artist;
+	}
+	
+	@Transactional
+	public Artist getArtist(long id) {
+		 Artist artist = (Artist) userRoleRepo.findUserRoleById(id);
+		 return artist;
+	}
+	
+	//Service methods for Order
 	@Transactional
 	public Order createOrder(Client client, Posting posting) {
 		
+		// Create order
 		Order order = new Order();
-		Set<Posting> postings = new HashSet<Posting>();
-		postings.add(posting);
-		order.setItems(postings);
 		order.setClient(client);
 		order.setInStorePickUp(true);
 		order.setOrderStatus(OrderStatus.IN_PROCESS);
+			
+		// Create set of postings for the order
+		Set<Posting> items = new HashSet<Posting>();
+		order.setItems(items);
+				
+		// Save order in repository
 		orderRepo.save(order);
+		
 		return order;
 	}
 	

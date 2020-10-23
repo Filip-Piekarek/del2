@@ -66,7 +66,7 @@ public class Profile{
 	}
 	
 	@Column
-	public String password;
+	private String password;
 	
 	public void setPassword(String value) {
 		this.password = value;
