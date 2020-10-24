@@ -24,7 +24,6 @@ import ca.mcgill.ecse321.artgallery.model.OrderStatus;
 import ca.mcgill.ecse321.artgallery.model.Posting;
 import ca.mcgill.ecse321.artgallery.model.Profile;
 import ca.mcgill.ecse321.artgallery.model.User;
-import ca.mcgill.ecse321.artgallery.model.UserRole;
 
 @Service
 public class ArtGalleryService {

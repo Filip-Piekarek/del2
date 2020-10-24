@@ -18,11 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import ca.mcgill.ecse321.artgallery.dao.ArtworkCrudRepository;
-import ca.mcgill.ecse321.artgallery.dao.OrderCrudRepository;
-import ca.mcgill.ecse321.artgallery.dao.PostingCrudRepository;
-import ca.mcgill.ecse321.artgallery.dao.ProfileCrudRepository;
-import ca.mcgill.ecse321.artgallery.dao.UserCrudRepository;
 import ca.mcgill.ecse321.artgallery.model.Address;
 import ca.mcgill.ecse321.artgallery.model.Artist;
 import ca.mcgill.ecse321.artgallery.model.Artwork;
