@@ -34,6 +34,23 @@ public class Client extends UserRole{
 	public void setOrders(Set<Order> orderss) {
 		this.orders = orderss;
 	}
+	
+	public Order getOrderById(long orderId) {
+    	for (Order order : this.orders) {
+    		if (order.getId() == orderId) {
+    			return order;
+    		}
+    	}
+    	return null;
+	}
+	
+	public void removeOrderById(long id) {
+		for (Order order : this.orders) {
+    		if (order.getId() == id) {
+    			this.orders.remove(order);
+    		}
+    	}
+	}
 
 
 	 private Set<Address> addresses;

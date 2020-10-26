@@ -39,8 +39,21 @@ public class Order{
 		this.items = itemss;
 	}
 	
-	public void addItem(Posting item) {
-		this.items.add(item);
+	public void removeByPostingById(long id) {
+		for (Posting posting : this.items) {
+			if (posting.getId() == id) {
+				this.items.remove(posting);
+			}
+		}
+	}
+	
+	public Posting getPostingById(long id) {
+		for (Posting post : this.items) {
+			if (post.getId() == id) {
+				return post;
+			}
+		}
+		return null;
 	}
 	
 
