@@ -42,6 +42,25 @@ public class Artist extends UserRole{
     public void addArtwork(Artwork artwork) {
     	this.artworks.add(artwork);
     }
+    
+    public void removeArtworkById(long id) {
+    	for (Artwork art : this.artworks) {
+    		if (art.getId() == id) {
+    			this.artworks.remove(art);
+    		}
+    	}
+    }
+    
+    public Artwork getArtworkById(long id) {
+    	Artwork artwork = new Artwork();
+    	for (Artwork art : this.artworks) {
+    		if (art.getId() == id) {
+    			artwork = art;
+    			return artwork;
+    		}
+    	}
+    	return null;
+    }
 
     @Column
     private String biography;

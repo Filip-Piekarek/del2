@@ -41,6 +41,23 @@ public class ArtistDto {
 		artworks.add(artwork);
 	}
 	
+	public ArtworkDto getArtworkById(long id) {
+		for (ArtworkDto art : this.artworks) {
+			if (art.getId() == id) {
+				return art;
+			}
+		}
+		return null;
+	}
+	
+	public void removeArtworkById(long id) {
+		for (ArtworkDto art : this.artworks) {
+			if (art.getId() == id) {
+				this.artworks.remove(art);
+			}
+		}
+	}
+	
 	public String getBiography() {
 		return biography;
 	}
