@@ -165,6 +165,7 @@ public class ArtGalleryService {
 	@Transactional
 	public Artwork createArtwork(Artist artist, String name, String description, Date date, ArtworkType type) {
 		
+		
 		//Create artwork
 		Artwork artwork = new Artwork();
 		artwork.setName(name);
