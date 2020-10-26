@@ -38,6 +38,23 @@ public class ClientDto {
 		this.orders = orders;
 	}
 	
+	public OrderDto getOrderById(long id) {
+		for (OrderDto i : this.orders) {
+			if (i.getId() == id) {
+				return i;
+			}
+		}
+		return null;
+	}
+	
+	public void removeOrderById(long id) {
+		for (OrderDto order : this.orders) {
+			if (order.getId()==id) {
+				this.orders.remove(order);
+			}
+		}
+	}
+	
 	public String getDeliveryAddress() {
 		return deliveryAddress;
 	}

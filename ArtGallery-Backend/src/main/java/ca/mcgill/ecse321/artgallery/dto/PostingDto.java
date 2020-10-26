@@ -7,6 +7,7 @@ public class PostingDto {
 	private double price;
 	private long id;
 	private boolean visibility;
+	private int priority;
 	
 	public PostingDto() {
 	}
@@ -57,5 +58,13 @@ public class PostingDto {
 	
 	public void setVisibility(boolean visibility) {
 		this.visibility = visibility;
+	}
+	
+	public int getPriority() {
+		return this.priority;
+	}
+	
+	public void setPriority(int priority) {
+		this.priority = priority;
 	}
 }

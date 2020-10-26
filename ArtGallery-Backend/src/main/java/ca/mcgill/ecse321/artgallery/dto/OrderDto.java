@@ -44,6 +44,23 @@ public class OrderDto {
 		this.items = items;
 	}
 	
+	public PostingDto getItemById(long id){
+		for (PostingDto post : this.items) {
+			if (post.getId() == id) {
+				return post;
+			}
+		}
+		return null;
+	}
+	
+	public void removeItemById(long id) {
+		for (PostingDto item : this.items) {
+			if (item.getId() == id) {
+				this.items.remove(item);
+			}
+		}
+	}
+	
 	public long getId() {
 		return id;
 	}
