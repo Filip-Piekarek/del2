@@ -20,6 +20,17 @@ public class ArtworkService {
 	@Autowired
 	private UserRoleCrudRepository userRoleRepo;
 	
+	/**
+	 * Creates and ads an ArtWork if the user is an Artist.
+	 * 
+	 * @param artist
+	 * @param name
+	 * @param description
+	 * @param date
+	 * @param type
+	 * @param UserRoleid
+	 * @return
+	 */
 	@Transactional
 	public Artwork createArtwork(Artist artist, String name, String description, Date date, ArtworkType type,long userRoleid) {
 		//Will create and add artwork to a profile if the profile is of an artist
