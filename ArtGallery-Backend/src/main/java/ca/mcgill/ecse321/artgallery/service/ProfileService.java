@@ -1,5 +1,6 @@
 package ca.mcgill.ecse321.artgallery.service;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -90,21 +91,7 @@ public class ProfileService {
 			
 			return toSet(artworkRepo.findAll());
 		}
-		/*
-		 * need to change
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-	
-		 * 
-		 */
+		
 		@Transactional
 		public void deleteProfile(Profile profile) {
 			
@@ -113,16 +100,14 @@ public class ProfileService {
 			String username = profile.getUsername();
 			profileRepo.deleteById(username);
 			if(profile.isIsArtistProfile()) {
-				if(getAllArtworks()==null) {
-					
+				for (Artwork art : ((Artist) profile.getUser().getUserRole()).getArtworks()) {
+					artworkRepo.delete(art);
 				}
-				
 			}
 			userRoleRepo.deleteById(userRoleID);
 			userRepo.deleteById(id);
-
-			
 		}
+		
 		@Transactional
 		public Profile editProfile(String oldUsername, String newUsername, String newPassword, String newEmail, String newPhone,String newName) {
 			Profile profile = profileRepo.findProfileByUsername(oldUsername);
