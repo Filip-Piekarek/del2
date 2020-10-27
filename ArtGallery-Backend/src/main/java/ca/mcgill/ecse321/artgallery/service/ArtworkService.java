@@ -57,7 +57,15 @@ public class ArtworkService {
 		}
 			
 	}
-public boolean deleteArtwork(long artistId,long artworkId) {
+	/**
+	 * Deletes an ArtWork if the artist owns it.
+	 * 
+	 * @param artistId
+	 * @param artworkId
+	 * @return
+	 */
+	@Transactional
+	public boolean deleteArtwork(long artistId,long artworkId) {
 	Artwork item = artworkRepo.findArtworkById(artworkId);
 	Artist artist = (Artist) userRoleRepo.findUserRoleById(artistId);
 	if (artist == null) {
