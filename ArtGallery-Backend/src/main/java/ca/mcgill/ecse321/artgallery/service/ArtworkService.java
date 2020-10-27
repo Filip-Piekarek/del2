@@ -13,6 +13,7 @@ import ca.mcgill.ecse321.artgallery.dao.UserRoleCrudRepository;
 import ca.mcgill.ecse321.artgallery.model.Artist;
 import ca.mcgill.ecse321.artgallery.model.Artwork;
 import ca.mcgill.ecse321.artgallery.model.ArtworkType;
+import ca.mcgill.ecse321.artgallery.service.exception.ArtworkException;
 import ca.mcgill.ecse321.artgallery.service.exception.UserRoleException;
 
 @Service
@@ -55,6 +56,23 @@ public class ArtworkService {
 			return artwork;
 		}
 			
+	}
+public boolean deleteArtwork(long artistId,long artworkId) {
+	Artwork item = artworkRepo.findArtworkById(artworkId);
+	Artist artist = (Artist) userRoleRepo.findUserRoleById(artistId);
+	if (artist == null) {
+		throw new UserRoleException("Artist does not exist");
+	}
+	else if (item == null) {
+		throw new ArtworkException("Artwork does not exist");
+	}
+	else if (artist.getArtworkById(item.getId())== null) {
+		throw new UserRoleException("Artist does not own artwork");
+	}
+	else {
+		artworkRepo.delete(artist.getArtworkById(item.getId()));
+	}	
+		return true;
 	}
 	/**
 	 * get artwork
