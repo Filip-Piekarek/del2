@@ -1,6 +1,8 @@
 package ca.mcgill.ecse321.artgallery.service;
 
 import java.sql.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,7 +23,7 @@ public class ArtworkService {
 	private UserRoleCrudRepository userRoleRepo;
 	
 	/**
-	 * Creates and ads an ArtWork if the user is an Artist.
+	 * Creates and adds an ArtWork if the user is an Artist.
 	 * 
 	 * @param artist
 	 * @param name
@@ -53,6 +55,38 @@ public class ArtworkService {
 			return artwork;
 		}
 			
+	}
+	/**
+	 * get artwork
+	 * 
+	 * @param id
+	 * @return
+	 */
+	@Transactional
+	public Artwork getArtwork(long id) {
+		
+		return artworkRepo.findArtworkById(id);
+	}
+	/**
+	 * get all artworks
+	 * 
+	 * @return
+	 */
+	@Transactional
+	public Set<Artwork> getAllArtworks() {
+		
+		return toSet(artworkRepo.findAll());
+	}
+	
+	
+	
+	//Iterable to Set
+	private <T> Set<T> toSet(Iterable<T> iterable){
+		Set<T> resultList = new HashSet<T>();
+		for (T t : iterable) {
+			resultList.add(t);
+		}
+		return resultList;
 	}
 
 }
