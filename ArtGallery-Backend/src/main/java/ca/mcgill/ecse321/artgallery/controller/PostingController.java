@@ -1,16 +1,84 @@
 package ca.mcgill.ecse321.artgallery.controller;
 
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
+import ca.mcgill.ecse321.artgallery.dao.UserCrudRepository;
+import ca.mcgill.ecse321.artgallery.dao.UserRoleCrudRepository;
+import ca.mcgill.ecse321.artgallery.dto.PostingDto;
+import ca.mcgill.ecse321.artgallery.model.Artist;
+import ca.mcgill.ecse321.artgallery.model.User;
 import ca.mcgill.ecse321.artgallery.service.PostingService;
 
 @CrossOrigin(origins = "*")
 @RestController
 public class PostingController {
-	
+
 	@Autowired
 	private PostingService postingService;
 
+	@GetMapping(value = { "/postings", "/postings/" })
+	public Set<PostingDto> getAllPostings(){
+		return postingService.getAllPostingsDto();
+	}
+	
+	@GetMapping(value = { "/postings/{postingId}", "/postings/{postingId}/"})
+	public PostingDto getPosting(@PathVariable("postingId") long postingId) {
+		return postingService.getPosting(postingId);
+	}
+	
+	@GetMapping(value = { "/artists/{artistId}/postings", "/artists/{artistId}/postings/"})
+	public Set<PostingDto> getAllPostingsOfArtist(@PathVariable("artistId") long artistId){
+		return postingService.getAllPostingsByArtist(artistId);
+	}
+	
+	@GetMapping(value = { "/{artistId}/{artworkId}/posting", "/{artistId}/{artworkId}/posting/"})
+	public PostingDto getPostingOfArtwork(@PathVariable("artistId") long artistId, @PathVariable("artworkId") long artworkId) {
+		return postingService.getPostingOfArtwork(artistId, artistId);
+	}
+	
+	@GetMapping(value = {"/{clientId}/orders/{orderId}/items", "/{clientId}/orders/{orderId}/items/"})
+	public Set<PostingDto> getPostingsOfOrder(@PathVariable("clientId") long clientId, @PathVariable("orderId") long orderId){
+		return postingService.getPostingsOfOrder(clientId, orderId);
+	}
+
+	@PostMapping(value = {"/postings/{postingId}", "/postings/{postingId}/"})
+	public PostingDto createPosting(long artistId, @PathVariable("postingId") long itemId, double price, boolean visibility, boolean isOnline)
+			throws IllegalArgumentException {
+		return postingService.createPosting(artistId, itemId, price, visibility, isOnline);
+	}
+	
+	@GetMapping(value = {"/{artistId}/artworks/{artworkId}/{postingId}", "/{artistId}/artworks/{artworkId}/{postingId}/"})
+	public boolean deletePosting(@PathVariable("artistId") long artistId, @PathVariable("artworkId") long artworkId, @PathVariable("postingId") long postingId) {
+		return postingService.deletePosting(artistId, artworkId, postingId);
+	}
+	
+	@GetMapping(value = {"/{artistId}/postings/{postingId}/edit", "/{artistId}/postings/{postingId}/edit/"})
+	public PostingDto editPricing(@PathVariable("artistId") long artistId, @PathVariable("postingId") long postingId, double nPrice) {
+		return postingService.editPostingPrice(artistId, postingId, nPrice);
+	}
+	
+	@GetMapping(value = {"/{artistId}/postings/{postingId}/edit", "/{artistId}/postings/{postingId}/edit/"})
+	public PostingDto takeDownPosting(@PathVariable("artistId") long artistId, @PathVariable("postingId") long postingId) {
+		return postingService.takeDownPosting(artistId, postingId);
+	}
+	
+	@GetMapping(value = {"/{artistId}/postings/{postingId}/edit", "/{artistId}/postings/{postingId}/edit/"})
+	public PostingDto putUpPosting(@PathVariable("artistId") long artistId, @PathVariable("postingId") long postingId) {
+		return postingService.putUpPosting(artistId, postingId);
+	}
+	
+	@GetMapping(value = {"/{artistId}/postings/{postingId}/edit", "/{artistId}/postings/{postingId}/edit/"})
+	public PostingDto promotePosting(@PathVariable("artistId") long artistId, @PathVariable("postingId") long postingId) {
+		return postingService.promotePosting(artistId, postingId);
+	}
 }
