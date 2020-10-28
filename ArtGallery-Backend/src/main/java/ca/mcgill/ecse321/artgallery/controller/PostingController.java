@@ -3,20 +3,14 @@ package ca.mcgill.ecse321.artgallery.controller;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import ca.mcgill.ecse321.artgallery.dao.UserCrudRepository;
-import ca.mcgill.ecse321.artgallery.dao.UserRoleCrudRepository;
 import ca.mcgill.ecse321.artgallery.dto.PostingDto;
-import ca.mcgill.ecse321.artgallery.model.Artist;
-import ca.mcgill.ecse321.artgallery.model.User;
 import ca.mcgill.ecse321.artgallery.service.PostingService;
 
 @CrossOrigin(origins = "*")
@@ -62,23 +56,23 @@ public class PostingController {
 		return postingService.deletePosting(artistId, artworkId, postingId);
 	}
 	
-	@GetMapping(value = {"/{artistId}/postings/{postingId}/edit", "/{artistId}/postings/{postingId}/edit/"})
-	public PostingDto editPricing(@PathVariable("artistId") long artistId, @PathVariable("postingId") long postingId, double nPrice) {
+	@GetMapping(value = {"/{artistId}/postings/{postingId}/edit/price", "/{artistId}/postings/{postingId}/edit/price/"})
+	public PostingDto editPricing(@PathVariable("/artistId") long artistId, @PathVariable("postingId") long postingId, @RequestParam double nPrice) {
 		return postingService.editPostingPrice(artistId, postingId, nPrice);
 	}
 	
-	@GetMapping(value = {"/{artistId}/postings/{postingId}/edit", "/{artistId}/postings/{postingId}/edit/"})
-	public PostingDto takeDownPosting(@PathVariable("artistId") long artistId, @PathVariable("postingId") long postingId) {
-		return postingService.takeDownPosting(artistId, postingId);
+	@GetMapping(value = {"/{artistId}/postings/{postingId}/edit/visibility", "/{artistId}/postings/{postingId}/edit/visibility/"})
+	public PostingDto editVisibility(@PathVariable("/artistId") long artistId, @PathVariable("postingId") long postingId, @RequestParam boolean visibility) {
+		if (visibility) {
+			return postingService.putUpPosting(artistId, postingId);
+		} else {
+			return postingService.takeDownPosting(artistId, postingId);
+		}
 	}
 	
-	@GetMapping(value = {"/{artistId}/postings/{postingId}/edit", "/{artistId}/postings/{postingId}/edit/"})
-	public PostingDto putUpPosting(@PathVariable("artistId") long artistId, @PathVariable("postingId") long postingId) {
-		return postingService.putUpPosting(artistId, postingId);
-	}
 	
-	@GetMapping(value = {"/{artistId}/postings/{postingId}/edit", "/{artistId}/postings/{postingId}/edit/"})
-	public PostingDto promotePosting(@PathVariable("artistId") long artistId, @PathVariable("postingId") long postingId) {
+	@GetMapping(value = {"/{artistId}/postings/{postingId}/edit/promote", "/{artistId}/postings/{postingId}/edit/promote/"})
+	public PostingDto promotePosting(@PathVariable("/artistId") long artistId, @PathVariable("postingId") long postingId) {
 		return postingService.promotePosting(artistId, postingId);
 	}
 }
