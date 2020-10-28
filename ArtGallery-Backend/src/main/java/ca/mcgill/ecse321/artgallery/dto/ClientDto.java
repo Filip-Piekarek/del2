@@ -3,23 +3,25 @@ package ca.mcgill.ecse321.artgallery.dto;
 import java.util.Collections;
 import java.util.Set;
 
+import ca.mcgill.ecse321.artgallery.model.Address;
+
 public class ClientDto {
 
 	private long id;
 	private Set<OrderDto> orders;
-	private String deliveryAddress;
+	private Set<AddressDto> addresses;
 	
 	public ClientDto() {
 	}
 	
 	public ClientDto(long id, String deliveryAddress) {
-		this(id, Collections.emptySet(), deliveryAddress);
+		this(id, Collections.emptySet(), Collections.emptySet());
 	}
 	
-	public ClientDto(long id, Set<OrderDto> orders, String deliveryAddress) {
+	public ClientDto(long id, Set<OrderDto> orders, Set<AddressDto> deliveryAddress) {
 		this.id = id;
 		this.orders = orders;
-		this.deliveryAddress = deliveryAddress;
+		this.addresses = deliveryAddress;
 	}
 	
 	public long getId() {
@@ -55,11 +57,11 @@ public class ClientDto {
 		}
 	}
 	
-	public String getDeliveryAddress() {
-		return deliveryAddress;
+	public Set<AddressDto> getAddresses() {
+		return this.addresses;
 	}
-	
-	public void setDeliveryAddress(String deliveryAddress) {
-		this.deliveryAddress = deliveryAddress;
+
+	public void setAddresses(Set<AddressDto> addresses) {
+		this.addresses = addresses;
 	}
 }
