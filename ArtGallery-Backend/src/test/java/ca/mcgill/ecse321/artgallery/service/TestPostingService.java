@@ -29,6 +29,7 @@ import org.mockito.stubbing.Answer;
 import org.mockito.invocation.InvocationOnMock;
 
 import ca.mcgill.ecse321.artgallery.dao.ArtworkCrudRepository;
+import ca.mcgill.ecse321.artgallery.dao.OrderCrudRepository;
 import ca.mcgill.ecse321.artgallery.dao.PostingCrudRepository;
 import ca.mcgill.ecse321.artgallery.dao.ProfileCrudRepository;
 import ca.mcgill.ecse321.artgallery.dao.UserCrudRepository;
@@ -37,6 +38,9 @@ import ca.mcgill.ecse321.artgallery.dto.PostingDto;
 import ca.mcgill.ecse321.artgallery.model.Artist;
 import ca.mcgill.ecse321.artgallery.model.Artwork;
 import ca.mcgill.ecse321.artgallery.model.ArtworkType;
+import ca.mcgill.ecse321.artgallery.model.Client;
+import ca.mcgill.ecse321.artgallery.model.Order;
+import ca.mcgill.ecse321.artgallery.model.OrderStatus;
 import ca.mcgill.ecse321.artgallery.model.Posting;
 import ca.mcgill.ecse321.artgallery.model.Profile;
 import ca.mcgill.ecse321.artgallery.model.User;
@@ -58,6 +62,8 @@ public class TestPostingService {
 	private ProfileCrudRepository profileDao;
 	@Mock
 	private ArtworkCrudRepository artworkDao;
+	@Mock
+	private OrderCrudRepository orderDao;
 
 	@InjectMocks
 	private PostingService postingService;
@@ -87,7 +93,7 @@ public class TestPostingService {
 	private static final ArtworkType TYPE = ArtworkType.ACRYLIC_PAINTING;
 	private static final Date DATE = Date.valueOf(LocalDate.of(2020, Month.APRIL, 20));
 	Artwork ARTWORK = new Artwork();
-	
+
 	// Second artwork
 	private static final long ARTWORK_KEY2 = 63;
 	private static final String ARTWORK_NAME2 = "Rouge";
@@ -129,6 +135,33 @@ public class TestPostingService {
 	private static final String BIO2 = "hello world!";
 	Artist ARTIST2 = new Artist();
 
+	// Parameters for a second user which is a client
+	// User parameters
+	private static final long USER_KEY3 = 64;
+	private static final String USER_NAME3 = "Jules";
+	private User USER3 = new User();
+
+	// Profile parameters
+	private static final String PROFILE_USERNAME3 = "ceasar";
+	private static final boolean ARTIST_PROFILE3 = false;
+	private static final String PHONE_NUMBER3 = "514-777-7777";
+	private static final String EMAIL_ADDRESS3 = "jules@gmail.com";
+	private static final String PASSWORD3 = "thIs2IsaValidPass23#";
+	private Profile PROFILE3 = new Profile();
+
+	// UserRole parameters
+	private static final long USERROLE_KEY3 = 23321;
+	Client CLIENT = new Client();
+
+	// Order parameters
+	private static final long ORDER_KEY = 2342;
+	private static final boolean IN_STORE_PICKUP = true;
+	private static OrderStatus ORDER_STATUS = OrderStatus.IN_PROCESS;
+	Order ORDER = new Order();
+	
+	// New posting parameters for edit tests
+	private static final double nPRICE = 4500;
+
 
 	private void generalSetUp() {
 
@@ -162,7 +195,7 @@ public class TestPostingService {
 		ARTWORK.setId(ARTWORK_KEY);
 		ARTWORK.setCreator(ARTIST);
 		ARTIST.addArtwork(ARTWORK);
-		
+
 		ARTWORK2.setArtworkType(TYPE2);
 		ARTWORK2.setDate(DATE2);
 		ARTWORK2.setDescription(DESCRIPTION2);
@@ -206,6 +239,40 @@ public class TestPostingService {
 		ARTIST2.setUser(USER2);
 	}
 
+	private void clientSetUp() {
+		// user
+		USER3.setId(USER_KEY3);
+		USER3.setName(USER_NAME3);
+
+		// profile
+		PROFILE3.setUsername(PROFILE_USERNAME3);
+		PROFILE3.setEmailAddress(EMAIL_ADDRESS3);
+		PROFILE3.setIsArtistProfile(ARTIST_PROFILE3);
+		PROFILE3.setPassword(PASSWORD3);
+		PROFILE3.setPhoneNumber(PHONE_NUMBER3);
+		PROFILE3.setUser(USER3);
+
+		USER3.setProfile(PROFILE3);
+
+		CLIENT.setId(USERROLE_KEY3);
+		CLIENT.setUser(USER3);
+		Set<Order> orders = new HashSet<Order>();
+		CLIENT.setOrders(orders);
+
+		ORDER.setId(ORDER_KEY);
+		ORDER.setInStorePickUp(IN_STORE_PICKUP);
+		ORDER.setOrderStatus(ORDER_STATUS);
+		ORDER.setClient(CLIENT);
+
+		orders.add(ORDER);
+		
+		Set<Posting> items = new HashSet<Posting>();
+		ORDER.setItems(items);
+		
+		ORDER.getItems().add(POSTING);
+		POSTING.setOrder(ORDER);
+	}
+
 	@BeforeEach
 	public void setMockOutput() {
 		MockitoAnnotations.initMocks(this);
@@ -218,11 +285,15 @@ public class TestPostingService {
 				return ARTIST;
 
 			} else if (invocation.getArgument(0).equals(USERROLE_KEY2)){
-
 				dummyArtistSetUp();
-
+				
 				return ARTIST2;
 
+			} else if (invocation.getArgument(0).equals(USERROLE_KEY3)){
+				generalSetUp();
+				clientSetUp();
+				
+				return CLIENT;
 			} else {
 				return null;
 			}
@@ -238,7 +309,7 @@ public class TestPostingService {
 
 			} else if (invocation.getArgument(0).equals(ARTWORK_KEY2)){
 				generalSetUp();
-				
+
 				return ARTWORK2;
 			} else {
 				return null;
@@ -249,7 +320,7 @@ public class TestPostingService {
 			if(invocation.getArgument(0).equals(POSTING_KEY)) {
 
 				generalSetUp();
-
+				clientSetUp();
 				return POSTING;
 
 			} else {
@@ -257,13 +328,26 @@ public class TestPostingService {
 			}
 		});
 
-		lenient().when(postingService.getAllPostingsDto()).thenAnswer( (InvocationOnMock invocation) -> {
+		lenient().when(postingService.getAllPostings()).thenAnswer( (InvocationOnMock invocation) -> {
 
 			generalSetUp();
+			clientSetUp();
 			List<Posting> postings = new ArrayList<Posting>();
 			postings.add(POSTING);
 			return postings;
 
+		});
+		
+		lenient().when(orderDao.findOrderById(anyLong())).thenAnswer((InvocationOnMock invocation) -> {
+			if(invocation.getArgument(0).equals(ORDER_KEY)) {
+				generalSetUp();
+				clientSetUp();
+
+				return ORDER;
+
+			} else {
+				return null;
+			}
 		});
 
 		Answer<?> returnParameterAsAnswer = (InvocationOnMock invocation) -> {
@@ -271,6 +355,10 @@ public class TestPostingService {
 		};
 
 		lenient().when(postingDao.save(any(Posting.class))).thenAnswer(returnParameterAsAnswer);
+		lenient().when(artworkDao.save(any(Artwork.class))).thenAnswer(returnParameterAsAnswer);
+		lenient().when(orderDao.save(any(Order.class))).thenAnswer(returnParameterAsAnswer);
+		
+	
 	}
 
 
@@ -295,20 +383,20 @@ public class TestPostingService {
 	@Test
 	public void testCreatePostingWihtoutValidArtistId() {
 		PostingDto post = null;
-		
+
 		try {
 			post = postingService.createPosting(INVALID_ARTIST_KEY, ARTWORK_KEY, PRICE, VISIBILITY, IS_ONLINE);
 		} catch (UserRoleException e) {
 			assertEquals("Artist does not exist", e.getMessage());
 		}
-		
+
 		assertNull(post);
 	}
-	
+
 	@Test
 	public void testCreatePostingWithoutCorrectOwner() {
 		PostingDto post = null;
-		
+
 		try {
 			post = postingService.createPosting(USERROLE_KEY2, ARTWORK_KEY, PRICE, VISIBILITY, IS_ONLINE);
 		} catch (UserRoleException e) {
@@ -316,30 +404,33 @@ public class TestPostingService {
 		}
 		assertNull(post);
 	}
-	
+
 	@Test
 	public void testCreatePostingWithNullArtwork() {
 		PostingDto post = null;
-		
+
 		try {
 			post = postingService.createPosting(USERROLE_KEY, INVALID_ARTWORK_KEY, PRICE, VISIBILITY, IS_ONLINE);
 		} catch (ArtworkException e) {
 			assertEquals("Artwork does not exist", e.getMessage());
 		}
-		
+
 		assertNull(post);
 	}
-	
+
 	@Test
 	public void testDeleteValidPosting() {
+		
 		try {
 			assertTrue(postingService.deletePosting(USERROLE_KEY, ARTWORK_KEY, POSTING_KEY));
+			// delete does not technically work here as we are not deleting the instance in the class
+			// dont know how to write a lenient when call .deleteById()
 		} catch (Exception e) {
 			fail();
 		}
-		
+
 	}
-	
+
 	@Test
 	public void testDeleteNonExistantPosting() {
 		boolean delete = false;
@@ -350,7 +441,7 @@ public class TestPostingService {
 		}
 		assertFalse(delete);
 	}
-	
+
 	@Test
 	public void testDeleteUserNotAllowed() {
 
@@ -362,7 +453,7 @@ public class TestPostingService {
 		}
 		assertFalse(delete);
 	}
-	
+
 	@Test
 	public void testDeleteUserRoleDoesNotExist() {
 
@@ -373,9 +464,9 @@ public class TestPostingService {
 			assertEquals("Artist does not exist", e.getMessage());
 		}
 		assertFalse(delete);
-	
+
 	}
-	
+
 	@Test
 	public void testDeleteArtworkDoesNotExist() {
 
@@ -386,11 +477,11 @@ public class TestPostingService {
 			assertEquals("Artwork does not exist", e.getMessage());
 		}
 		assertFalse(delete);
-	
+
 	}
-	
+
 	@Test
-	public void testDeleteArtworkDoesNotCorrespondToPosting() {
+	public void testDeletePostingArtworkDoesNotCorrespondToPosting() {
 
 		boolean delete = false;
 		try {
@@ -399,22 +490,29 @@ public class TestPostingService {
 			assertEquals("Posting does not correspond to this artwork", e.getMessage());
 		}
 		assertFalse(delete);
-	
+
 	}
 	
+	@Test 
+	public void testDeletePosting() {
+		
+	}
+
 	@Test
 	public void testGetAllPostings() {
 		Set<Posting> allPostings = new HashSet<Posting>();
-		
+
 		try {
 			allPostings = postingService.getAllPostings();
 		} catch (Exception e) {
 			fail();
 		}
-		
+
 		assertFalse(allPostings.isEmpty());
 		assertTrue(allPostings.contains(POSTING));
 	}
+
+
 
 //	@Test
 //	public void testGetValidPosting() {
@@ -431,7 +529,7 @@ public class TestPostingService {
 //		assertEquals(PRICE, post.getPrice());
 //		// NULL POINTER FOR NOW BECAUSE METHODS NOT YET IMPLEMENTED 
 //		// (convert artwork and artist to Dto)
-//		assertEquals(ARTWORK_KEY, post.getItem().getId() );
+//		assertEquals(ARTWORK_KEY, post.getItem().getId());
 //		assertEquals(USERROLE_KEY, post.getItem().getArtist().getId());
 //	}
 
@@ -498,21 +596,197 @@ public class TestPostingService {
 		assertTrue(postings.contains(POSTING));
 
 	}
-	
+
 	@Test 
 	public void testGetAllPostingsFromArtistWhoDoesntHavePostings() {
 		Set<Posting> postings = null;
-		
+
 		try {
 			postings = postingService.getAllPostingsByArtist(USERROLE_KEY2);
 		} catch (Exception e) {
 			fail();
 		}
-		
+
 		assertTrue(postings.isEmpty());
 	}
 	
+	@Test
+	public void testEditPostingPrice() {
+		PostingDto post = null;
+		try {
+			post = postingService.editPostingPrice(USERROLE_KEY, POSTING_KEY, nPRICE);
+		} catch (Exception e) {
+			fail();
+		}
+		assertNotNull(post);
+		assertEquals(nPRICE, post.getPrice());
+		
+	}
+	
+	@Test
+	public void testEditPostingPriceArtistDoesntExist() {
+		PostingDto post = null;
+		try {
+			post = postingService.editPostingPrice(INVALID_ARTIST_KEY, POSTING_KEY, nPRICE);
+		} catch (UserRoleException e) {
+			assertEquals("Artist does not exist", e.getMessage());
+		}
+		assertNull(post);
+	}
+	
+	@Test
+	public void testEditPostingPriceArtistDoesNotOwnPosting() {
+		PostingDto post = null;
+		try {
+			post = postingService.editPostingPrice(USERROLE_KEY2, POSTING_KEY, nPRICE);
+		} catch (UserRoleException e) {
+			assertEquals("Artist does not own posting", e.getMessage());
+		}
+		assertNull(post);
+	}
+	
+	@Test
+	public void testEditPricePostingDoesNotExist() {
+		PostingDto post = null;
+		try {
+			post = postingService.editPostingPrice(USERROLE_KEY, INVALID_POSTING_KEY, nPRICE);
+		} catch (PostingException e) {
+			assertEquals("Posting does not exist", e.getMessage());
+		}
+		assertNull(post);
+	}
+	
+	@Test
+	public void testTakeDownValidPosting() {
+		PostingDto post = null;
+		try {
+			post = postingService.takeDownPosting(USERROLE_KEY, POSTING_KEY);
+		} catch (Exception e) {
+			fail();
+		}
+		assertFalse(post.isVisible());
+	}
+	
+	@Test
+	public void testTakeDownNonValidPosting() {
+		PostingDto post = null;
+		try {
+			post = postingService.takeDownPosting(USERROLE_KEY, INVALID_POSTING_KEY);
+		} catch (PostingException e) {
+			assertEquals("Posting does not exist", e.getMessage());
+		}
+		assertNull(post);
+	}
+	
+	@Test
+	public void testTakeDownPostingArtistDoesNotExist() {
+		PostingDto post = null;
+		try {
+			post = postingService.takeDownPosting(INVALID_ARTIST_KEY, POSTING_KEY);
+		} catch (UserRoleException e) {
+			assertEquals("Artist does not exist", e.getMessage());
+		}
+		assertNull(post);
+	}
+	
+	@Test
+	public void testTakeDownPostingArtistDoesNotOwnPosting() {
+		PostingDto post = null;
+		try {
+			post = postingService.takeDownPosting(USERROLE_KEY2, POSTING_KEY);
+		} catch (UserRoleException e) {
+			assertEquals("Artist does not own posting", e.getMessage());
+		}
+		assertNull(post);
+	}
+	
+	@Test
+	public void testPutUpValidPosting() {
+		PostingDto post = null;
+		try {
+			post = postingService.putUpPosting(USERROLE_KEY, POSTING_KEY);
+		} catch (Exception e) {
+			fail();
+		}
+		assertTrue(post.isVisible());
+	}
 
+	@Test
+	public void testPutUpNonValidPosting() {
+		PostingDto post = null;
+		try {
+			post = postingService.putUpPosting(USERROLE_KEY, INVALID_POSTING_KEY);
+		} catch (PostingException e) {
+			assertEquals("Posting does not exist", e.getMessage());
+		}
+		assertNull(post);
+	}
+
+	@Test
+	public void testPutUpPostingArtistDoesNotExist() {
+		PostingDto post = null;
+		try {
+			post = postingService.putUpPosting(INVALID_ARTIST_KEY, POSTING_KEY);
+		} catch (UserRoleException e) {
+			assertEquals("Artist does not exist", e.getMessage());
+		}
+		assertNull(post);
+	}
+	
+	@Test
+	public void testPutUpPostingArtistDoesNotOwnPosting() {
+		PostingDto post = null;
+		try {
+			post = postingService.putUpPosting(USERROLE_KEY2, POSTING_KEY);
+		} catch (UserRoleException e) {
+			assertEquals("Artist does not own posting", e.getMessage());
+		}
+		assertNull(post);
+	}
+	
+	@Test
+	public void testPromoteValidPosting() {
+		PostingDto post = null;
+		try {
+			post = postingService.promotePosting(USERROLE_KEY, POSTING_KEY);
+		} catch (Exception e) {
+			fail();
+		}
+		assertTrue(post.getPriority() > 0);
+	}
+	
+	@Test
+	public void testPromoteInvalidPosting() {
+		PostingDto post = null;
+		try {
+			post = postingService.promotePosting(USERROLE_KEY, INVALID_POSTING_KEY);
+		} catch (PostingException e) {
+			assertEquals("Posting does not exist", e.getMessage());
+		}
+		assertNull(post);
+	}
+	
+	@Test
+	public void testPromotePostingArtistDoesNotExist() {
+		PostingDto post = null;
+		try {
+			post = postingService.promotePosting(INVALID_ARTIST_KEY, POSTING_KEY);
+		} catch (UserRoleException e) {
+			assertEquals("Artist does not exist", e.getMessage());
+		}
+		assertNull(post);
+	}
+	
+	@Test
+	public void testPromotePostingArtistDoesNotOwnPosting() {
+		PostingDto post = null;
+		try {
+			post = postingService.promotePosting(USERROLE_KEY2, POSTING_KEY);
+		} catch (UserRoleException e) {
+			assertEquals("Artist does not own posting", e.getMessage());
+		}
+		assertNull(post);
+	}
 
 
 }

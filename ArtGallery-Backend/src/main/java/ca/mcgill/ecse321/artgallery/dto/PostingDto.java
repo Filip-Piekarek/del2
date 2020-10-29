@@ -52,7 +52,7 @@ public class PostingDto {
 		this.id = id;
 	}
 	
-	public boolean isVisibility() {
+	public boolean isVisible() {
 		return visibility;
 	}
 	
