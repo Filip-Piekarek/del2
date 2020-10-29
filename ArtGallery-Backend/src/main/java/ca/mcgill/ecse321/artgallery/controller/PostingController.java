@@ -1,5 +1,6 @@
 package ca.mcgill.ecse321.artgallery.controller;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ca.mcgill.ecse321.artgallery.dto.PostingDto;
+import ca.mcgill.ecse321.artgallery.model.Posting;
 import ca.mcgill.ecse321.artgallery.service.PostingService;
 
 @CrossOrigin(origins = "*")
@@ -32,7 +34,13 @@ public class PostingController {
 	
 	@GetMapping(value = { "/artists/{artistId}/postings", "/artists/{artistId}/postings/"})
 	public Set<PostingDto> getAllPostingsOfArtist(@PathVariable("artistId") long artistId){
-		return postingService.getAllPostingsByArtist(artistId);
+		Set<PostingDto> postings = new HashSet<PostingDto>();
+		PostingDto posting = null;
+		for (Posting post : postingService.getAllPostingsByArtist(artistId)) {
+			posting = postingService.convertPostingToDto(post);
+			postings.add(posting);
+		}
+		return postings;
 	}
 	
 	@GetMapping(value = { "/{artistId}/{artworkId}/posting", "/{artistId}/{artworkId}/posting/"})

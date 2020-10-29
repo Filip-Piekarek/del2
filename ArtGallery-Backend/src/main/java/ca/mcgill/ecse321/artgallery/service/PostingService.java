@@ -53,12 +53,12 @@ public class PostingService {
 	}
 
 	/**
-	 * Private method used for the class to return all objects from repository in
+	 * Method used for the class to return all objects from repository in
 	 * the entity object.
 	 * 
 	 * @return
 	 */
-	private Set<Posting> getAllPostings(){
+	public Set<Posting> getAllPostings(){
 		Set<Posting> allPosts = new HashSet<Posting>();
 		for (Posting post : postingRepo.findAll()) {
 			allPosts.add(post);
@@ -89,15 +89,15 @@ public class PostingService {
 	 * @param artistId
 	 * @return
 	 */
-	public Set<PostingDto> getAllPostingsByArtist(long artistId) {
+	public Set<Posting> getAllPostingsByArtist(long artistId) {
 		Artist artist = (Artist) userRoleRepo.findUserRoleById(artistId);
 		 if (artist == null) {
 			 throw new UserRoleException("Artist does not exist");
 		 } else {
-			 Set<PostingDto> postings = new HashSet<PostingDto>();
+			 Set<Posting> postings = new HashSet<Posting>();
 			 for (Artwork art : artist.getArtworks()) {
 				 if (art.getPosting() != null) {
-					 postings.add(convertPostingToDto(art.getPosting()));
+					 postings.add(art.getPosting());
 				 }
 			 }
 			 return postings;
@@ -177,7 +177,7 @@ public class PostingService {
 		} else if (item == null) {
 			throw new ArtworkException("Artwork does not exist");
 		} else if (artist.getArtworkById(item.getId()) == null) {
-			throw new ArtworkException("Artist does not own artwork");
+			throw new UserRoleException("Artist does not own artwork");
 		}  else {
 			// Create posting
 			Posting posting = new Posting();

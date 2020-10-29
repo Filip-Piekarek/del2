@@ -28,7 +28,7 @@ public class PostingDto {
 		this.order = order;
 	}
 	
-	public ArtworkDto GetItem() {
+	public ArtworkDto getItem() {
 		return item;
 	}
 	
