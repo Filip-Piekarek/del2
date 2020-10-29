@@ -28,7 +28,7 @@ public class PostingDto {
 		this.order = order;
 	}
 	
-	public ArtworkDto GetItem() {
+	public ArtworkDto getItem() {
 		return item;
 	}
 	
@@ -52,7 +52,7 @@ public class PostingDto {
 		this.id = id;
 	}
 	
-	public boolean isVisibility() {
+	public boolean isVisible() {
 		return visibility;
 	}
 	

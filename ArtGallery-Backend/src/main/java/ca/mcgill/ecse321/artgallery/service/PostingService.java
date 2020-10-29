@@ -53,12 +53,12 @@ public class PostingService {
 	}
 
 	/**
-	 * Private method used for the class to return all objects from repository in
+	 * Method used for the class to return all objects from repository in
 	 * the entity object.
 	 * 
 	 * @return
 	 */
-	private Set<Posting> getAllPostings(){
+	public Set<Posting> getAllPostings(){
 		Set<Posting> allPosts = new HashSet<Posting>();
 		for (Posting post : postingRepo.findAll()) {
 			allPosts.add(post);
@@ -82,27 +82,27 @@ public class PostingService {
 		}
 
 	}
-	
+
 	/**
 	 * Returns all postings associated to an artist.
 	 * 
 	 * @param artistId
 	 * @return
 	 */
-	public Set<PostingDto> getAllPostingsByArtist(long artistId) {
+	public Set<Posting> getAllPostingsByArtist(long artistId) {
 		Artist artist = (Artist) userRoleRepo.findUserRoleById(artistId);
-		 if (artist == null) {
-			 throw new UserRoleException("Artist does not exist");
-		 } else {
-			 Set<PostingDto> postings = new HashSet<PostingDto>();
-			 for (Artwork art : artist.getArtworks()) {
-				 if (art.getPosting() != null) {
-					 postings.add(convertPostingToDto(art.getPosting()));
-				 }
-			 }
-			 return postings;
-			
-		 }
+		if (artist == null) {
+			throw new UserRoleException("Artist does not exist");
+		} else {
+			Set<Posting> postings = new HashSet<Posting>();
+			for (Artwork art : artist.getArtworks()) {
+				if (art.getPosting() != null) {
+					postings.add(art.getPosting());
+				}
+			}
+			return postings;
+
+		}
 	}
 
 	/**
@@ -115,7 +115,7 @@ public class PostingService {
 	public PostingDto getPostingOfArtwork(long artistId, long artworkId) {
 		Artist artist = (Artist) userRoleRepo.findUserRoleById(artistId);
 		Artwork artwork = artworkRepo.findArtworkById(artworkId);
-		
+
 		if (artist == null) {
 			throw new UserRoleException("Artist does not exist");
 		} else if (artwork == null) {
@@ -128,7 +128,7 @@ public class PostingService {
 			return convertPostingToDto(artwork.getPosting());
 		}
 	}
-	
+
 	/**
 	 * Returns all postings added to a specific order.
 	 * 
@@ -139,7 +139,7 @@ public class PostingService {
 	public Set<PostingDto> getPostingsOfOrder(long clientId, long orderId){
 		Client client = (Client) userRoleRepo.findUserRoleById(clientId);
 		Order order = orderRepo.findOrderById(orderId);
-		
+
 		if (client == null) {
 			throw new UserRoleException("Client does not exist");
 		} else if (order == null) {
@@ -154,7 +154,7 @@ public class PostingService {
 			return items;
 		}
 	}
-	
+
 	/**
 	 * Create a posting object corresponding to an artwork.
 	 * Default priority is 0.
@@ -177,7 +177,7 @@ public class PostingService {
 		} else if (item == null) {
 			throw new ArtworkException("Artwork does not exist");
 		} else if (artist.getArtworkById(item.getId()) == null) {
-			throw new ArtworkException("Artist does not own artwork");
+			throw new UserRoleException("Artist does not own artwork");
 		}  else {
 			// Create posting
 			Posting posting = new Posting();
@@ -227,7 +227,11 @@ public class PostingService {
 
 			if (posting.getOrder() != null) {
 				Order order = orderRepo.findOrderById(posting.getOrder().getId());
-				order.removeByPostingById(postId);
+				for (Posting post : order.getItems()) {
+					if (post.getId() == postId) {
+						order.getItems().remove(post);
+					}
+				}
 
 				orderRepo.save(order);
 			}
@@ -256,9 +260,11 @@ public class PostingService {
 
 		if (artist == null) {
 			throw new UserRoleException("Artist does not exist");
-		} if (artist.getArtworkById(posting.getItem().getId())== null) {
+		} else if (posting == null) {
+			throw new PostingException("Posting does not exist");
+		} else if (artist.getArtworkById(posting.getItem().getId())== null) {
 			throw new UserRoleException("Artist does not own posting");
-		} else {
+		}  else {
 			posting.setPrice(nPrice);
 
 			postingRepo.save(posting);
@@ -358,7 +364,7 @@ public class PostingService {
 			posting.setPriority(maxP+1);
 
 			postingRepo.save(posting);
-			
+
 			return convertPostingToDto(posting);
 		}
 	}
@@ -370,19 +376,19 @@ public class PostingService {
 	 * @return
 	 */
 	public PostingDto convertPostingToDto(Posting posting) {
-		
+
 		PostingDto postingDto = new PostingDto();
-		
+
 		postingDto.setId(posting.getId());
 		postingDto.setItem(convertArtworkToDto(posting.getItem()));
 		postingDto.setPrice(posting.getPrice());
 		postingDto.setVisibility(posting.isVisibility());
 		postingDto.setPriority(posting.getPriority());
-		
+
 		if (posting.getOrder() != null) {
 			postingDto.setOrder(convertOrderToDto(posting.getOrder()));
 		}
-		
+
 		return postingDto;
 
 	}

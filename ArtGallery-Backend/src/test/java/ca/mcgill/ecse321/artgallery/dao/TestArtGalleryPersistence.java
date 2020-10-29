@@ -385,7 +385,7 @@ public class TestArtGalleryPersistence {
 	public void testPersistAndLoadPosting() {
 
 		// Create user
-		String name = "Zoé";
+		String name = "Zoe";
 		User user = new User();
 		user.setName(name);
 
